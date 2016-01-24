@@ -14,6 +14,9 @@
     "jquery/jquery.d.ts": {
       "commit": "bb051830df88f5a55dcf06b7fe85bf6b62cc97f2"
     },
+    "restangular/restangular.d.ts": {
+      "commit": "f2ae460e1751bb6668d291d4eb9255f047dd0ac5"
+    },
     "angular-ui-router/angular-ui-router.d.ts": {
       "commit": "bb051830df88f5a55dcf06b7fe85bf6b62cc97f2"
     },

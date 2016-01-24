@@ -14,7 +14,15 @@ declare var moment: moment.MomentStatic;
 module biathlon {
   'use strict';
 
-  angular.module('biathlon', ['ngAnimate', 'ngSanitize', 'ngMessages', 'ngAria', 'ui.router', 'ngMaterial', 'toastr'])
+  angular.module('biathlon', [
+      'ngAnimate', 
+      'ngSanitize', 
+      'ngMessages', 
+      'ngAria', 
+      'ui.router', 
+      'ngMaterial', 
+      'toastr',
+      'restangular'])
     .constant('moment', moment)
     .config(config)
     .config(routerConfig)
