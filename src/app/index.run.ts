@@ -1,12 +1,33 @@
-import {Athletes, Competitions, Bios, FactCategories, StatCategoriesService} from './services/services'
-
+import {
+    Athletes, 
+    Competitions, 
+    Bios,
+    CupResults,
+    Cups,
+    Events,
+    FactItems,
+    Organizers,
+    Results,
+    Seasons,
+    StatItems,
+    Stats} from './services/services';
+    
 /** @ngInject */
 export function runBlock(
     $log: angular.ILogService, 
     Restangular: restangular.IService,
     Athletes: Athletes,
     Competitions: Competitions,
-    Bios: Bios) {
+    Bios: Bios,
+    CupResults,
+    Cups,
+    Events,
+    FactItems,
+    Organizers,
+    Results,
+    Seasons,
+    StatItems,
+    Stats) {
     
     Restangular.setBaseUrl('http://datacenter.biathlonresults.com/modules/sportapi/api/');
     Restangular.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK', RT: 385698, RequestId: 1});
@@ -20,16 +41,41 @@ export function runBlock(
         if (operation === "getList") {
             switch(endpoint) {
                 case Athletes.Entity:
-                    extractedData = data.Athletes;
-                    break;
-                case "cupresults":
-                    extractedData = data.Rows;
+                    extractedData = Athletes.transformResponse(data, response);
                     break;
                 case Bios.Entity: 
-                    extractedData = data.Bios;
+                    extractedData = Bios.transformResponse(data, response);
                     break;
                 case Competitions.Entity:
-                    extractedData = data;
+                    extractedData = Competitions.transformResponse(data, response);
+                    break;
+                case CupResults.Entity:
+                    extractedData = CupResults.transformResponse(data, response);
+                    break;
+                case Cups.Entity:
+                    extractedData = Cups.transformResponse(data, response);
+                    break;
+                case Events.Entity:
+                    extractedData = Events.transformResponse(data, response);
+                    break;
+                case FactItems.Entity:
+                    extractedData = FactItems.transformResponse(data, response);
+                    break;
+                case Organizers.Entity:
+                    extractedData = Organizers.transformResponse(data, response);
+                    break;
+                case Results.Entity:
+                    extractedData = Results.transformResponse(data, response);
+                    break;
+                case Seasons.Entity:
+                    extractedData = Seasons.transformResponse(data, response);
+                    break;
+                case StatItems.Entity:
+                    extractedData = StatItems.transformResponse(data, response);
+                    break;
+                case Stats.Entity:
+                    extractedData = Stats.transformResponse(data, response);
+                    break;
                 default:
                     extractedData = data;
             }

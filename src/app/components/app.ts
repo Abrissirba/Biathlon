@@ -8,6 +8,7 @@ export function abrisApp(): angular.IDirective {
     template: `
         <div layout="row">
             <abris-navbar></abris-navbar>
+            <abris-events></abris-events>
             <div ui-view layout="column" flex></div>
         </div>
     `,

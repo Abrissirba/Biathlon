@@ -8,7 +8,7 @@ export class Bios extends ApiBaseService<IBio>{
     }
     
     transformResponse(data: any, response: any) : Array<any>{
-        return response.data.Bios;
+        return data.Bios;
     }
 
     getList(IBUId: string): restangular.ICollectionPromise<IBio>{

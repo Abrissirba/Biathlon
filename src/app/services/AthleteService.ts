@@ -8,7 +8,7 @@ export class Athletes extends ApiBaseService<IAthlete>{
     }
     
     transformResponse(data: any, response: any) : Array<any>{
-        return response.data.Athletes;
+        return data.Athletes;
     }
     
     getList(firstName: string, lastName: string) : restangular.ICollectionPromise<IAthlete>{

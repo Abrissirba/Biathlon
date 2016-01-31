@@ -8,7 +8,7 @@ export class Competitions extends ApiBaseService<ICompetition>{
     }
     
     transformResponse(data: any, response: any) : Array<any>{
-        return response.data;
+        return data;
     }
 
     getList(eventId: string): restangular.ICollectionPromise<ICompetition>{
