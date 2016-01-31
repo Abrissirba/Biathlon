@@ -9,6 +9,8 @@ import { abrisNavbar } from './components/navbar/navbar'
 
 import { NavbarState } from './components/navbar/navbarState'
 
+import {Athletes, Competitions, Bios, FactCategories, StatCategoriesService} from './services/services'
+
 declare var moment: moment.MomentStatic;
 
 module biathlon {
@@ -22,7 +24,8 @@ module biathlon {
       'ui.router', 
       'ngMaterial', 
       'toastr',
-      'restangular'])
+      'restangular',
+      'pascalprecht.translate'])
     .constant('moment', moment)
     .config(config)
     .config(routerConfig)
@@ -32,5 +35,10 @@ module biathlon {
     .directive('abrisNavbar', abrisNavbar)
     .directive('abrisHome', abrisHome)
     
-    .service('NavbarState', NavbarState);
+    .service('NavbarState', NavbarState)
+    .service('Athletes', Athletes)
+    .service('Competitions', Competitions)
+    .service('Bios', Bios)
+    .service('FactCategories', FactCategories)
+    .service('StatCategoriesService', StatCategoriesService);
 }

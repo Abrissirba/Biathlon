@@ -1,4 +1,7 @@
 export * from './IFactCategory'
 export * from './IStatCategory'
+export * from './IAthlete'
+export * from './IBio'
+export * from './ICompetition'
 export * from './IStatQuery'
 export * from './ByWhat'

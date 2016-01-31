@@ -1,8 +1,15 @@
+import {Athletes, Competitions, Bios, FactCategories, StatCategoriesService} from './services/services'
+
 /** @ngInject */
-export function runBlock($log: angular.ILogService, Restangular: restangular.IService) {
+export function runBlock(
+    $log: angular.ILogService, 
+    Restangular: restangular.IService,
+    Athletes: Athletes,
+    Competitions: Competitions,
+    Bios: Bios) {
     
     Restangular.setBaseUrl('http://datacenter.biathlonresults.com/modules/sportapi/api/');
-    Restangular.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
+    Restangular.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK', RT: 385698, RequestId: 1});
     Restangular.setJsonp(true);
     
     Restangular.addResponseInterceptor(function(data: any, operation: any, what: any, url: any, response: any, deferred: any) {
@@ -12,14 +19,17 @@ export function runBlock($log: angular.ILogService, Restangular: restangular.ISe
         
         if (operation === "getList") {
             switch(endpoint) {
-                case "athletes":
+                case Athletes.Entity:
                     extractedData = data.Athletes;
                     break;
                 case "cupresults":
                     extractedData = data.Rows;
                     break;
-                case "bios": 
-                    
+                case Bios.Entity: 
+                    extractedData = data.Bios;
+                    break;
+                case Competitions.Entity:
+                    extractedData = data;
                 default:
                     extractedData = data;
             }

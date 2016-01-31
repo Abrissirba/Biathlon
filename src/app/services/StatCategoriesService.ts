@@ -1,6 +1,6 @@
 import { IStatCategory } from '../models/models'
 
-export class FactCategories {
+export class StatCategoriesService {
     categories: Array<IStatCategory> =  [{
         key: 'WC',
         title: 'World Cup Statistics'
