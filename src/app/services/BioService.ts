@@ -4,7 +4,7 @@ import { IBio } from '../models/models'
 export class Bios extends ApiBaseService<IBio>{
     
     constructor(Restangular: restangular.IService){
-        super("bios", this.transformResponse, Restangular);
+        super("bios", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

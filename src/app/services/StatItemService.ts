@@ -4,7 +4,7 @@ import { IStatItem } from '../models/models'
 export class StatItems extends ApiBaseService<IStatItem>{
     
     constructor(Restangular: restangular.IService){
-        super("statitems", this.transformResponse, Restangular);
+        super("statitems", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

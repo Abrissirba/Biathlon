@@ -10,6 +10,7 @@ export * from './ResultService'
 export * from './SeasonService'
 export * from './StatService'
 export * from './StatItemService'
+export * from './AnalyzeService';
 export * from './FactCategoriesService'
 export * from './StatCategoriesService'
 export * from './TableHelperService'

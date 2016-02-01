@@ -4,7 +4,7 @@ import { ICompetition } from '../models/models'
 export class Competitions extends ApiBaseService<ICompetition>{
     
     constructor(Restangular: restangular.IService){
-        super("competitions", this.transformResponse, Restangular);
+        super("competitions", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

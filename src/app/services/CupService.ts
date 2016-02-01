@@ -4,7 +4,7 @@ import { ICup } from '../models/models'
 export class Cups extends ApiBaseService<ICup>{
     
     constructor(Restangular: restangular.IService){
-        super("cups", this.transformResponse, Restangular);
+        super("cups", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

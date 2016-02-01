@@ -4,7 +4,7 @@ import { IAthlete } from '../models/models'
 export class Athletes extends ApiBaseService<IAthlete>{
     
     constructor(Restangular: restangular.IService){
-        super("athletes", this.transformResponse, Restangular);
+        super("athletes", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

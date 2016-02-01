@@ -4,7 +4,7 @@ import { IEvent } from '../models/models'
 export class Events extends ApiBaseService<IEvent>{
     
     constructor(Restangular: restangular.IService){
-        super("events", this.transformResponse, Restangular);
+        super("events", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

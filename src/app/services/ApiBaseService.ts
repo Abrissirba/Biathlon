@@ -3,7 +3,6 @@ export class ApiBaseService <T>{
     
     constructor(
         public Entity: string,
-        transformFn: (data, response) => Array<T>,
         private Restangular: restangular.IService){
                 
         this.Service = this.getService(this.Entity);

@@ -4,7 +4,7 @@ import { ICupResult } from '../models/models'
 export class CupResults extends ApiBaseService<ICupResult>{
     
     constructor(Restangular: restangular.IService){
-        super("cupresults", this.transformResponse, Restangular);
+        super("cupresults", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

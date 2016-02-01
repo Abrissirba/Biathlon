@@ -4,7 +4,7 @@ import { IOrganizer } from '../models/models'
 export class Organizers extends ApiBaseService<IOrganizer>{
     
     constructor(Restangular: restangular.IService){
-        super("organizers", this.transformResponse, Restangular);
+        super("organizers", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

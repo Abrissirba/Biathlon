@@ -4,7 +4,7 @@ import { IStat, IStatQuery } from '../models/models'
 export class Stats extends ApiBaseService<IStat>{
     
     constructor(Restangular: restangular.IService){
-        super("stats", this.transformResponse, Restangular);
+        super("stats", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

@@ -1,4 +1,5 @@
 import {
+    Analysis,
     Athletes, 
     Competitions, 
     Bios,
@@ -16,6 +17,7 @@ import {
 export function runBlock(
     $log: angular.ILogService, 
     Restangular: restangular.IService,
+    Analysis: Analysis,
     Athletes: Athletes,
     Competitions: Competitions,
     Bios: Bios,
@@ -40,6 +42,9 @@ export function runBlock(
         
         if (operation === "getList") {
             switch(endpoint) {
+                case Analysis.Entity:
+                    extractedData = Analysis.transformResponse(data, response);
+                    break;
                 case Athletes.Entity:
                     extractedData = Athletes.transformResponse(data, response);
                     break;

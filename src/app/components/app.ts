@@ -7,8 +7,11 @@ export function abrisApp(): angular.IDirective {
     restrict: 'E',
     template: `
         <div layout="row">
-            <abris-navbar></abris-navbar>
-            <abris-events></abris-events>
+            <abris-navbar>
+            
+            </abris-navbar>
+            <abris-analysis></abris-analysis>
+            <!-- <abris-events></abris-events> -->
             <div ui-view layout="column" flex></div>
         </div>
     `,
@@ -21,23 +24,7 @@ export function abrisApp(): angular.IDirective {
 
 /** @ngInject */
 export class AppController {
-  
-
-  constructor(
-        private Athletes: Athletes,
-        private Bios: Bios,
-        private Competitions: Competitions) {
-       
-        Athletes.getList("", "").then((data) => {
-            console.log(data);
-        });
+    constructor() {
         
-        Bios.getList("BTSWE12407198901").then((data) => {
-            console.log(data);
-        });
-        
-        Competitions.getList("BT1516SWRLCP01").then((data) => {
-            console.log(data);
-        });
-  }
+    }
 }

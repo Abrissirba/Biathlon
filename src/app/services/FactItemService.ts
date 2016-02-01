@@ -4,7 +4,7 @@ import { IFactItem } from '../models/models'
 export class FactItems extends ApiBaseService<IFactItem>{
     
     constructor(Restangular: restangular.IService){
-        super("factitems", this.transformResponse, Restangular);
+        super("factitems", Restangular);
     }
     
     transformResponse(data: any, response: any) : Array<any>{

@@ -7,6 +7,7 @@ import { abrisApp } from './components/app';
 import { abrisHome } from './components/home';
 import { abrisNavbar } from './components/navbar/navbar';
 import { abrisEvents } from './components/events';
+import { abrisAnalysis } from './components/analysis';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -25,7 +26,8 @@ import {
     Seasons,
     StatItems,
     Stats,
-    TableHelperService} from './services/services';
+    TableHelperService, 
+    Analysis} from './services/services';
 
 declare var moment: moment.MomentStatic;
 
@@ -42,7 +44,8 @@ module biathlon {
       'toastr',
       'restangular',
       'md.data.table',
-      'pascalprecht.translate'])
+      'pascalprecht.translate',
+      'googlechart'])
     .constant('moment', moment)
     .config(config)
     .config(routerConfig)
@@ -52,9 +55,11 @@ module biathlon {
     .directive('abrisNavbar', abrisNavbar)
     .directive('abrisHome', abrisHome)
     .directive('abrisEvents', abrisEvents)
+    .directive('abrisAnalysis', abrisAnalysis)
     
     .service('NavbarState', NavbarState)
     
+    .service('Analysis', Analysis)
     .service('Athletes', Athletes)
     .service('Competitions', Competitions)
     .service('CupResults', CupResults)
