@@ -6,12 +6,10 @@ export function abrisApp(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-        <div layout="row">
+        <div layout="row" layout-fill>
             <abris-navbar>
             
             </abris-navbar>
-            <abris-analysis></abris-analysis>
-            <!-- <abris-events></abris-events> -->
             <div ui-view layout="column" flex></div>
         </div>
     `,

@@ -14,7 +14,7 @@ export class Events extends ApiBaseService<IEvent>{
     getList(seasonId: string): restangular.ICollectionPromise<IEvent>{
         return this.Service.getList<IEvent>({
             SeasonId: seasonId,
-            level: 0
+            level: 1
         });
     }
 }

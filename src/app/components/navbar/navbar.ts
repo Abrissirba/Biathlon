@@ -13,7 +13,15 @@ export function abrisNavbar(): angular.IDirective {
             </md-toolbar>
 
             <ng-transclude></ng-transclude>
-
+            
+                <md-button ui-sref='{{ item.state }}' ng-repeat="item in navbarVm.items" md-ink-ripple>
+                    <div layout="row">
+                        <md-icon md-font-library='material-icons'>{{item.icon}}</md-icon>
+                        <span>{{ item.title | translate }}</span>
+                        <span flex></span>
+                    </div>
+                </md-button>
+  
         </md-sidenav>
     `,
     controller: NavbarController,
@@ -26,6 +34,20 @@ export function abrisNavbar(): angular.IDirective {
 
 /** @ngInject */
 export class NavbarController {
+    
+    items: Array<any> = [{
+        title: "SCHEDULE_AND_RESULTS",
+        state: 'app.schedule'
+    },{
+        title: "CUPS",
+        state: 'app.cups'
+    },{
+        title: "ATHLETES",
+        state: 'app.athletes'
+    },{
+        title: "STATISTICS",
+        state: 'app.stats'
+    }]
     
     constructor(
         private $mdSidenav: angular.material.ISidenavService, 

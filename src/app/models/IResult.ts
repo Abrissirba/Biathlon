@@ -8,7 +8,7 @@ export interface IResult {
     Nat: string;
     Bib: string;
     Leg: string;
-    Rank: string;
+    Rank: number;
     Rnk: string;
     Shootings: string;
     ShootingTotal: string;

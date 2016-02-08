@@ -1,0 +1,43 @@
+abris-analysis {
+       
+    md-card {
+        .column {
+            padding: 0 8px 0 8px;
+            div {
+                padding: 2px 0 2px 0;
+            }
+            
+            &.row-descriptions {
+                padding: 43px 0 0 8px;
+                
+                .shooting {
+                    padding-top: 12px;
+                }
+            }
+        }
+        font-size: 12px;
+        letter-spacing: 0.020em;
+    }
+}
+
+abris-shooting-board {
+    $dot-size: 16;
+    $dot-margin: 4;
+    $board-size: ($dot-size + $dot-margin * 2) * 5;
+    display: block;
+    md-card{
+        width: $board-size + px;
+        margin: 4px 8px 8px 8px;
+        .dot {
+            height: $dot-size + px;
+            width: $dot-size + px;
+            background-color: #000;
+            margin: $dot-margin + px;
+            border-radius: 50%;
+            
+            &.hit {
+                background-color: #fff;
+            }
+        }
+    }
+}

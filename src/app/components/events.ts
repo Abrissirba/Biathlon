@@ -8,19 +8,25 @@ export function abrisEvents(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
+    <md-card>
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <span translate>EVENT_SCHEDULE</span>
+            </div>
+        </md-toolbar>
         <md-table-container>
-            <table md-table md-row-select='false' ng-model='eventVm.selected' md-progress='eventVm.promise'>
-                <thead md-head md-order='eventVm.query.order' md-on-reorder='eventVm.onReorder'>
+            <table md-table md-row-select='false' ng-model='eventsVm.selected' md-progress='eventsVm.promise'>
+                <thead md-head md-order='eventsVm.query.order' md-on-reorder='eventsVm.onReorder'>
                 <tr md-row>
-                    <th md-column md-order-by='StartDate'>StartDate</th>
-                    <th md-column md-order-by='Description'>Event</th>
-                    <th md-column md-order-by='Organizer'>Place</th>
-                    <th md-column md-order-by='Nat'>Country</th>
+                    <th md-column md-order-by='StartDate'><span translate>DATE</span></th>
+                    <th md-column md-order-by='Description'><span translate>EVENT</span></th>
+                    <th md-column md-order-by='Organizer'><span translate>PLACE</span></th>
+                    <th md-column md-order-by='Nat'><span translate>COUNTRY</span></th>
                 </tr>
                 </thead>
                 <tbody md-body>
-                <tr md-row ng-click='eventVm.open(event, $event)' ng-repeat='event in eventVm.events'>
-                    <td md-cell>{{event.StartDate}}</td>
+                <tr md-row ng-repeat='event in eventsVm.events' ui-sref="app.competitions({eventId: event.EventId})">
+                    <td md-cell>{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</td>
                     <td md-cell>{{event.Description}}</td>
                     <td md-cell>{{event.Organizer}}</td>
                     <td md-cell>{{event.Nat}}</td>
@@ -28,27 +34,33 @@ export function abrisEvents(): angular.IDirective {
                 </tbody>
             </table>
         </md-table-container>
+    </md-card>
     `,
-    controller: EventController,
-    controllerAs: 'eventVm',
+    controller: EventsController,
+    controllerAs: 'eventsVm',
     bindToController: true
   };
 
 }
 
 /** @ngInject */
-export class EventController extends TableBaseController<IEvent> {
+export class EventsController extends TableBaseController<IEvent> {
     
     events: Array<IEvent>;
     
     constructor(
         TableHelperService: TableHelperService,
-        Events: Events) {
+        Events: Events,
+        private $state: angular.ui.IStateService) {
         
         super(TableHelperService, 'events');
         
-        this.promise = Events.getList("").then((data) => {
+        this.promise = Events.getList("1516").then((data) => {
             this.events = data;
         });
+    }
+    
+    getLink(event: IEvent){
+        return "";
     }
 }

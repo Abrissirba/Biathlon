@@ -33,13 +33,16 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
              else if(field.FieldId.substr(3, 1) === "P"){
                  return AnalyzeField.Penalty;
              }
+             else if(field.FieldId.substr(3, 1) === "T"){
+                 return AnalyzeField.Total;
+             }
          }
          // Shooting Times
          else if(field.FieldId.substr(0, 1) === "S"){
              if(field.FieldId.substr(2, 2) === "TM") {
                  return AnalyzeField.ShootingTime;
              }
-             if(field.FieldId.substr(2, 2) === "TM") {
+             if(field.FieldId.substr(2, 2) === "FA") {
                  return AnalyzeField.Shooting;
              }
          }
@@ -47,18 +50,25 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
          else if(field.FieldId.substr(0, 1) === "I" && field.FieldId.substr(2, 2) === "SN"){
              return AnalyzeField.Cummulative;
          }
+         else if(field.FieldId.substr(0, 4) === "FINN"){
+             return AnalyzeField.Cummulative;
+         }
          else if(AnalyzeField.progression_5L.indexOf(field.FieldId) > -1){
              return AnalyzeField.ProgressField;
          }
     }
     
-    getLapForField(field){
+    getLapForField(field: IAnalyzeField){
         var type = this.getFieldType(field);
         if(type === AnalyzeField.Course 
             || type === AnalyzeField.Lap 
             || type === AnalyzeField.Range 
-            || type === AnalyzeField.Penalty){
+            || type === AnalyzeField.Penalty
+            || type === AnalyzeField.Total){
             return field.FieldId.substr(2, 1);
+        }
+        else if((type === AnalyzeField.Cummulative && field.FieldId === 'FINN')){
+            return "T";
         }
         return field.FieldId.substr(1, 1);
     }
@@ -76,7 +86,7 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
         var length = fields.length;
         var laps = 0;
         fields.forEach((field) => {
-            if(field.FieldId.indexOf("A0" + laps + 1) > -1){
+            if(field.FieldId.indexOf("A0" + (laps + 1)) > -1){
                 return ++laps;
             }
         });
@@ -96,12 +106,13 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
         });
     }
     
-    getLapAnalyzation(fields: Array<IAnalyzeField>, nrOfLaps: number){
+    getLapAnalyzation(fields: Array<IAnalyzeField>, nrOfLaps: number) : Array<AnalyzeLap>{
         var lapAnalyze = new Array<AnalyzeLap>();
         
         this.getLapFields(fields).forEach((field) => {
             var lapIndex = this.getLapIndex(this.getLapForField(field), nrOfLaps);
             var lap: AnalyzeLap = lapAnalyze[lapIndex] || <AnalyzeLap>{};
+            this.parseFieldValue(field);
             lap[this.getFieldType(field)] = field;
             lapAnalyze[lapIndex] = lap;
         });
@@ -109,7 +120,7 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
         return lapAnalyze;
     }
     
-    getProgressionAnalyzation(fields: Array<IAnalyzeField>, nrOfLaps: number) {
+    getProgressionAnalyzation(fields: Array<IAnalyzeField>, nrOfLaps: number) : Array<IAnalyzeField> {
         var progressionAnalyze = new Array<IAnalyzeField>();
         
         var progressionFieldIds = (nrOfLaps === 3) ? AnalyzeField.progression_3L : AnalyzeField.progression_5L;
@@ -132,6 +143,16 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
         var laps = this.getLapAnalyzation(fields, nrOfLaps);
         var progression = this.getProgressionAnalyzation(fields, nrOfLaps);
     }
+    
+    parseFieldValue(field: IAnalyzeField){
+        if(field.Value && field.Value[0] === "="){
+            field.Value = field.Value.substr(1);
+        }
+        if(field.Rank && field.Rank[0] === "="){
+            field.Rank = field.Rank.substr(1);
+        }
+         
+    }
 
 }
 
@@ -151,6 +172,7 @@ class AnalyzeField {
     static ShootingTime = "ShootingTime";
     static Shooting = "Shooting";
     static Cummulative = "Cummulative";
+    static Total = "Total";
     static ProgressField = "ProgressField";
     
     static LapFields = [AnalyzeField.Course, AnalyzeField.Range, AnalyzeField.Lap, AnalyzeField.Penalty, AnalyzeField.ShootingTime, AnalyzeField.Shooting, AnalyzeField.Cummulative];
@@ -174,4 +196,5 @@ interface AnalyzeLap {
     ShootingTime: IAnalyzeField;
     Shooting: IAnalyzeField;
     Cummulative: IAnalyzeField;
+    Total: IAnalyzeField;
 }

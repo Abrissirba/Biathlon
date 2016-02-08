@@ -8,6 +8,30 @@ export function routerConfig($stateProvider: angular.ui.IStateProvider, $urlRout
     .state('app.home', {
         url: 'home',
         template: temp('abrisHome')
+    })
+    .state('app.schedule', {
+        url: 'schedule',
+        template: temp('abrisEvents')
+    })
+    .state('app.competitions', {
+        url: 'competitions/:eventId',
+        template: temp('abrisCompetitions')
+    })
+    .state('app.results', {
+        url: 'results/:raceId',
+        template: temp('abrisResults')
+    })
+    .state('app.cups', {
+        url: 'cups',
+        template: temp('abrisCups')
+    })
+    .state('app.athletes', {
+        url: 'athletes',
+        template: temp('abrisAthletes')
+    })
+    .state('app.stats', {
+        url: 'stats',
+        template: temp('abrisStats')
     });
 
   $urlRouterProvider.otherwise('/');
