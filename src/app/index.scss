@@ -90,6 +90,42 @@ table {
     }
 }
 
+md-card-list {
+    .list-item {
+        padding: 8px 2px 8px 2px;
+        
+        span {
+            padding: 8px;
+            .list-item {
+                padding: 4px 2px 4px 2px;
+            }
+        }
+        > div {
+            padding: 0;
+            > div {
+                padding: 0 8px 0 8px;
+            }
+        }
+        abris-flag {
+            > span {
+                font-size: 20px;
+                padding: 0;
+            }
+        }
+    }
+    
+    .md-avatar{
+        border-radius: 50%;
+        box-sizing: content-box;
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+    }
+}
+
+.no-padding {
+    padding: 0;
+}
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
  *  all your sass files automatically

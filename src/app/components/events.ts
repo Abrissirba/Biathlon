@@ -8,7 +8,7 @@ export function abrisEvents(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-    <md-card>
+    <!-- <md-card>
         <md-toolbar class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <span translate>EVENT_SCHEDULE</span>
@@ -34,21 +34,22 @@ export function abrisEvents(): angular.IDirective {
                 </tbody>
             </table>
         </md-table-container>
-    </md-card>
+    </md-card> -->
     
-    <md-card ng-repeat="event in eventsVm.events">
-        <div layout="row">
-            <abris-flag  md-whiteframe="3" country-code="{{event.Nat}}"></abris-flag>
-            <div flex="20">{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</div>
-            <div flex>{{event.Organizer}}</div>
-        </div>
-        <div layout="row">
-            <div>{{event.Description}}</div>
-        </div>
-        
-        
-        
-    </md-card>
+    <md-card-list>
+        <md-card class="list-item" ng-repeat="event in eventsVm.events"  ui-sref="app.competitions({eventId: event.EventId})">
+            <div layout="row" layout-align="center center">
+                <div>
+                    <abris-flag  md-whiteframe="3" country-code="{{event.Nat}}"></abris-flag>
+                </div>
+                <div class="md-subhead">{{event.Organizer}}</div>
+                <div class="md-caption" flex>{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</div>
+            </div>
+            <div layout="row" style="padding-top: 4px;">
+                <div>{{event.Description}}</div>
+            </div>
+        </md-card>
+    </md-card-list>
     `,
     controller: EventsController,
     controllerAs: 'eventsVm',

@@ -1,6 +1,6 @@
-import { Results, ImageService, TableHelperService } from '../services/services'
-import { IResult } from '../models/models'
-import { TableBaseController } from './TableBaseComponent'
+import { Results, ImageService, TableHelperService } from '../services/services';
+import { IResult, IRelayTeamResult } from '../models/models';
+import { TableBaseController } from './TableBaseComponent';
 
 /** @ngInject */
 export function abrisResults(): angular.IDirective {
@@ -8,7 +8,7 @@ export function abrisResults(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-    <md-card>
+   <!-- <md-card>
         <md-toolbar class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <span translate>COMPETITION_DETAILS</span>
@@ -40,7 +40,93 @@ export function abrisResults(): angular.IDirective {
                 </tbody>
             </table>
         </md-table-container>
-    </md-card>
+    </md-card> -->
+    
+    <abris-topbar title="'Results'">
+        <md-button class="md-icon-button" aria-label="Favorite">
+          <md-icon class="material-icons">search</md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="More">
+          <md-icon class="material-icons">filter_list</md-icon>
+        </md-button>
+    </abris-topbar>
+    
+    <md-card-list>
+        <md-card class="list-item" ng-repeat="result in resultsVm.results" ng-if="resultsVm.results">
+            <div layout="row" layout-align="center center">
+                <div class="md-subhead">{{resultsVm.getRank(result)}}</div>
+                <div class="no-padding"><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
+                <div>{{result.Name}}</div>
+                <div class="no-padding" flex layout="row" layout-align="end center">
+                    <abris-flag md-whiteframe="3" country-code="{{result.Nat}}"></abris-flag>
+                </div>
+            </div>
+            <div layout="row" style="padding-top: 0">
+                <div layout="column">
+                    <div class="md-caption">Shootings</div>
+                    <div class="">{{result.Shootings}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Total Time</div>
+                    <div class="">{{result.TotalTime}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Behind</div>
+                    <div class="">{{result.Behind}}</div>
+                </div>
+            </div>
+        </md-card>
+        
+        <md-card class="list-item" ng-repeat="result in resultsVm.relayResults" ng-if="resultsVm.relayResults">
+            <div layout="row" layout-align="center center">
+                <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
+                <div>{{result.teamResult.Name}}</div>
+                <div class="no-padding" flex layout="row" layout-align="end center">
+                    <abris-flag md-whiteframe="3" country-code="{{result.teamResult.Nat}}"></abris-flag>
+                </div>
+            </div>
+            <div layout="row" style="padding-top: 0">
+                <div layout="column">
+                    <div class="md-caption">Shootings</div>
+                    <div class="">{{result.teamResult.Shootings}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Total Time</div>
+                    <div class="">{{result.teamResult.TotalTime}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Behind</div>
+                    <div class="">{{result.teamResult.Behind}}</div>
+                </div>
+            </div>
+            
+            <span class="individual-results">
+                <div class="list-item" ng-repeat="result in result.individualResults">
+                    <div layout="row" layout-align="center center">
+                        <div class=""><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
+                        <div flex>{{result.Name}}</div>
+                    </div>
+                    <div layout="row" style="padding-top: 0">
+                        <div layout="column">
+                            <div class="md-caption">Shootings</div>
+                            <div class="">{{result.Shootings}}</div>
+                        </div>
+                        <div layout="column">
+                            <div class="md-caption">Total Time</div>
+                            <div class="">{{result.TotalTime}}</div>
+                        </div>
+                        <div layout="column">
+                            <div class="md-caption">Behind</div>
+                            <div class="">{{result.Behind}}</div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+
+        </md-card>
+        
+       
+    </md-card-list>
     `,
     controller: ResultsController,
     controllerAs: 'resultsVm',
@@ -53,6 +139,7 @@ export function abrisResults(): angular.IDirective {
 export class ResultsController extends TableBaseController<IResult> {
     
     results: Array<IResult>;
+    relayResults: Array<IRelayTeamResult>;
     raceId: string;
     
     constructor(
@@ -66,25 +153,13 @@ export class ResultsController extends TableBaseController<IResult> {
         this.raceId = this.$state.params['raceId'];
         
         this.promise = Results.getList(this.raceId).then((data) => {
-            data.forEach((result) => {
-                result.Rank = parseInt(<any>result.Rank);
-                if(isNaN(result.Rank)){
-                    switch(result.IRM){
-                        case 'DNF':
-                            result.Rank = 997;
-                            break;
-                        case 'DSQ':
-                            result.Rank = 998;
-                            break;
-                        case 'DNS':
-                            result.Rank = 999;
-                            break;
-                    }
-                }
-            });
-            
-            this.results = data;
-            this.order(data);
+            if (angular.isDefined(data[0].Leg) && data[0].Leg !== null) {
+               this.relayResults = Results.parseRelayData(data);
+            }
+            else {
+                this.results = data;
+                this.order(data);
+            }
         });
     }
     

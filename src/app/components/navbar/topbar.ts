@@ -10,7 +10,7 @@ export function abrisTopbar(): angular.IDirective {
     },
     replace: true,
     template: `
-        <md-toolbar class='md-table-toolbar md-primary'>
+        <md-toolbar class='md-primary'>
             <div class='md-toolbar-tools'>
                 <md-button class='md-icon-button' aria-label='Menu' ng-click="topbarVm.toggleNavbar()" hide-gt-md>
                     <md-icon md-font-library='material-icons'>menu</md-icon>

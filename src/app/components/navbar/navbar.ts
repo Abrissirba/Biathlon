@@ -52,7 +52,7 @@ export class NavbarController {
     constructor(
         private $mdSidenav: angular.material.ISidenavService, 
         private NavbarState: NavbarState) {
-        
+        NavbarState.setNavbar(this);
     }
     
     toggleNavbar() {

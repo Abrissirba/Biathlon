@@ -8,7 +8,7 @@ export function abrisCompetitions(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-    <md-card>
+    <!-- <md-card>
         <md-toolbar class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <span translate>EVENT_DETAILS</span>
@@ -34,7 +34,19 @@ export function abrisCompetitions(): angular.IDirective {
                 </tbody>
             </table>
         </md-table-container>
-    </md-card>
+    </md-card> -->
+    
+    <md-card-list>
+        <md-card class="list-item" ng-repeat="competition in competitionsVm.competitions"  ui-sref="app.results({raceId: competition.RaceId})">
+            <div layout="row" layout-align="center center">
+                <div class="md-caption">{{competition.StartTime | date : 'dd MMM yyyy' : timezone}}</div>
+                <div class="md-caption" flex>{{competition.StartTime | date : 'HH:mm' : timezone}}</div>
+            </div>
+            <div layout="row">
+                <div class="md-subhead">{{competition.Description}}</div>
+            </div>
+        </md-card>
+    </md-card-list>
     `,
     controller: CompetitionsController,
     controllerAs: 'competitionsVm',
