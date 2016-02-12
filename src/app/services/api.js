@@ -1793,3 +1793,347 @@ function MediaAsset(RegisterDate,Description,Notes,Author,Format,URI) {
 }
 
 
+//RACEANALYSIS
+//16 SEP 2012 Christian Winkler
+
+function raceanalysis_init() {
+    
+    RootModel.raceanalysis = new raceanalysis_model();
+    
+}
+
+
+
+function raceanalysis_model() {
+    var self = this;
+
+    this.byLap = ko.observableArray([]);
+    this.byProgression = ko.observableArray([]);
+    this.sectorTimes = ko.observableArray([]);
+
+
+    this.progression_3L = ['P11N', 'I11N', 'P12N', 'I12N', 'P1SN', 'R1SN', 'E1SN', 'I1SN',
+                         'P21N', 'I21N', 'P22N', 'I22N', 'P2SN', 'R2SN', 'E2SN', 'I2SN',
+                         'P31N', 'I31N', 'P32N', 'I32N', 'PFSN', 'FINN'];
+
+    this.progression_5L = ['P11N', 'I11N', 'P12N', 'I12N', 'P1SN', 'R1SN', 'E1SN', 'I1SN',
+                         'P21N', 'I21N', 'P22N', 'I22N', 'P2SN', 'R2SN', 'E2SN', 'I2SN',
+                         'P31N', 'I31N', 'P32N', 'I32N', 'P3SN', 'R3SN', 'E3SN', 'I3SN',
+                         'P41N', 'I41N', 'P42N', 'I42N', 'P4SN', 'R4SN', 'E4SN', 'I4SN',
+                         'P51N', 'I51N', 'P52N', 'I52N', 'PFSN', 'FINN'];
+
+    this.DisciplineId = ko.observable();
+    this.NrLaps = ko.observable(3);
+
+
+    //Verfügbare Views
+    this.analysisViews = ko.observableArray([]);
+    this.analysisViews.push(new analysisView("Summary", "analysis_summary"));
+    this.analysisViews.push(new analysisView("Progr. Gap", "analysis_progression"));
+    this.analysisViews.push(new analysisView("Sector Times", "analysis_sectors"));
+    this.analysisViews.push(new analysisView("Shooting", "analysis_shooting"));
+
+
+    //Summary aktiv
+    this.currentAnalysisView = ko.observable();
+    this.currentAnalysisView.subscribe(function (newValue) {
+       
+        var old=ko.utils.arrayFirst(self.analysisViews(), function (m) {
+            return m.IsCurrent() || false;
+        });
+        if (old) { old.IsCurrent(false); $("#" + old.Visual()).hide(); };
+        newValue.IsCurrent(true);
+        $("#" + newValue.Visual()).show();
+        if (newValue.Description() === "Progr. Gap") self.drawAnalysisProgressionChart();
+        if (newValue.Description() === "Sector Times") self.drawSectorChart();
+
+    });
+    this.currentAnalysisView(this.analysisViews()[0]);
+
+    this.initAnalysis = function (DisciplineId, NrLaps) {
+        self.DisciplineId(DisciplineId);
+        self.NrLaps(NrLaps);
+        
+        //Bestehendes Array behalten, nur Werte löschen (ob das wirklich was  bringt ?)
+        if (NrLaps === (self.byLap().length-1)) {
+            for (iLap = 0; iLap <= NrLaps ; iLap++) {
+                self.byLap()[iLap].clearFields();
+            }        
+        } else {        //Neu anlegen
+            self.byLap([]);
+            var iLap = 0;
+            for (iLap = 0; iLap < NrLaps ; iLap++) {
+                self.byLap.push(new AnalysisLap(iLap+1,"Lap "+(iLap+1)));
+            }
+            var mTotal = new AnalysisLap(0, "Total");
+            self.byLap.push(mTotal);
+        }
+
+
+        self.byProgression([]);
+
+    }
+
+
+    this.parseDBAnalysis = function (data) {
+        var i = 0; var td; var k=0;
+
+        //byLap aufbauen
+        for (i = 0; i < data.length; i++) {
+            td = data[i];
+
+            if (self.DisciplineId() === "RL") {
+                //TODO: Für Staffel noch zu implementieren
+            } else {
+                if (td.FieldId.substr(0, 1) === "A" && td.FieldId.substr(3, 1) === "C") self.byLap()[self.lapIndex(td.FieldId.substr(2, 1))].Course(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "A" && td.FieldId.substr(3, 1) === "R") self.byLap()[self.lapIndex(td.FieldId.substr(2, 1))].Range(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "A" && td.FieldId.substr(3, 1) === "S") self.byLap()[self.lapIndex(td.FieldId.substr(2, 1))].Lap(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "A" && td.FieldId.substr(3, 1) === "P") self.byLap()[self.lapIndex(td.FieldId.substr(2, 1))].Penalty(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "S" && td.FieldId.substr(2, 2) === "TM") self.byLap()[self.lapIndex(td.FieldId.substr(1, 1))].ShootingTime(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "S" && td.FieldId.substr(2, 2) === "FA") self.byLap()[self.lapIndex(td.FieldId.substr(1, 1))].Shooting(new AnalysisValue(td));
+                if (td.FieldId.substr(0, 1) === "I" && td.FieldId.substr(2, 2) === "SN") self.byLap()[self.lapIndex(td.FieldId.substr(1, 1))].Cumulative(new AnalysisValue(td));
+                if (td.FieldId === "FINN") self.byLap()[self.lapIndex("T")].Cumulative(new AnalysisValue(td));
+            }
+        }
+
+        //byProgression aufbauen
+        var mFields = (self.NrLaps() === 3) ? self.progression_3L : self.progression_5L;
+        for (i = 0; i < mFields.length; i++) {
+            for (k = 0; k < data.length; k++) {
+                if (data[k].FieldId === mFields[i]) {
+                    var ProgValue = new AnalysisProgression(mFields[i], data[k].Value, data[k].Behind, "", "");
+                    self.byProgression.push(ProgValue);
+                    break;
+                }
+            }
+        }
+
+        self.refreshDiagrams();
+
+    }
+
+
+    this.refreshDiagrams = function () {
+        if (self.currentAnalysisView().Description() === "Progr. Gap") self.drawAnalysisProgressionChart();
+        if (self.currentAnalysisView().Description() === "Sector Times") self.drawSectorChart();
+    }
+
+
+    this.parseLiveAnalysis = function (unit, data) {
+        var Sectors = ko.utils.arrayFilter(data.Extensions(), function (item) {
+            return (item.Code().substr(0, 7) === "SECTOR.");
+        });
+        self.sectorTimes([]);
+        var i = 0;
+        for (i = 0; i < Sectors.length; i++) {
+            var sectorConfig = unit.UnitConfig(Sectors[i].Code());
+            if (Sectors[i].Value() && Sectors[i].Value() > 0 && sectorConfig.Value() && sectorConfig.Value() > 0) {
+                var value = Sectors[i].Value() - sectorConfig.Value();
+                var x = ((100 * Sectors[i].Value()) / sectorConfig.Value()) - 100;
+                self.sectorTimes().push(new AnalysisSector(sectorConfig.Description(), x));
+            }
+        }
+
+        self.refreshDiagrams();
+
+    }
+
+    this.lapIndex = function (code) {
+        if (code === "1") return 0;
+        if (code === "2") return 1;
+        if (code === "3") return 2;
+        if (code === "4") return 3;
+        if (code === "5") return 4;
+        if (code === "T") return self.NrLaps();
+    }
+
+
+
+    this.drawAnalysisProgressionChart = function () {
+
+        //Flachmachen
+        var mSeries = new Array();
+        var mCategories = new Array();
+
+        var mData1 = new Array();               
+        var i = 0;
+        for (i = 0; i < self.byProgression().length; i++) {
+            mCategories.push(self.byProgression()[i].Description());
+            mData1.push(parseTimeBehind(self.byProgression()[i].CumulativeBehind()));
+        }
+       
+       
+        var mSerie1 = { data: mData1 };
+
+
+        mSeries.push(mSerie1)
+
+        $("#analysis_progression_chart").kendoChart({
+            legend: {
+            },
+            chartArea: {
+                background: ""
+            },
+            seriesDefaults: {
+                type: "line"
+            },
+            series: mSeries,
+            valueAxis: {
+                reverse: true,
+                labels: {
+                    
+                },
+                color: "#F0F0F0"
+            },
+            categoryAxis: {
+                categories: mCategories,
+                color: "#F0F0F0"
+            },
+            tooltip: {
+                visible: true,
+                format: "{0}"
+            }
+        });
+    
+
+    }
+
+
+    this.drawSectorChart = function () {
+
+        //Flachmachen
+        var mSeries = new Array();
+        var mCategories = new Array();
+        var myMin = 100;
+        var myMax = -100;
+        var mData1 = new Array();
+        var i = 0;
+        for (i = 0; i < self.sectorTimes().length; i++) {
+            mCategories.push(self.sectorTimes()[i].Description);
+            mData1.push(self.sectorTimes()[i].Value);
+            if (self.sectorTimes()[i].Value < myMin) myMin = self.sectorTimes()[i].Value;
+            if (self.sectorTimes()[i].Value > myMax) myMax = self.sectorTimes()[i].Value;
+            myMin = parseInt(myMin);
+            myMax = parseInt(myMax);
+            if ((myMin * -1) > myMax) {
+                myMax=myMin*-1;
+            } else {
+                myMin=myMax*-1;
+            }
+
+        }
+
+
+        var mSerie1 = { data: mData1 };
+
+
+        mSeries.push(mSerie1)
+
+        $("#analysis_sector_chart").kendoChart({
+            legend: {
+            },
+            chartArea: {
+                background: ""
+            },
+            seriesDefaults: {
+                type: "line"
+            },
+            series: mSeries,
+            valueAxis: {
+                reverse: true,
+                labels: {
+
+                },
+                format: "{0:0.0}%",
+                color: "#F0F0F0",
+                min: myMin,
+                max: myMax
+            },
+            categoryAxis: {
+                categories: mCategories,
+                color: "#F0F0F0"
+            },
+            tooltip: {
+                visible: true,
+                format: "{0:0.0}%"
+            }
+        });
+
+
+    }
+
+
+}
+
+
+
+
+function AnalysisProgression(Description, CumulativeTime, CumulativeBehind, SectorTime, SectorBehind) {
+    this.Description = ko.observable(Description);
+    this.CumulativeTime = ko.observable(CumulativeTime);
+    this.CumulativeBehind = ko.observable(CumulativeBehind);
+    this.SectorTime = ko.observable(SectorTime);
+    this.SectorBehind = ko.observable(SectorBehind);
+}
+
+function AnalysisLap(LapNr, Description, Cumulative, Lap, Shooting, ShootingTime, Course, Range, Penalty) {
+    this.LapNr = ko.observable(LapNr);
+    this.Description = ko.observable(Description);
+    this.Cumulative = ko.observable(Cumulative);
+    this.Lap = ko.observable(Lap);
+    this.Shooting = ko.observable(Shooting);
+    this.ShootingTime = ko.observable(ShootingTime);
+    this.Course = ko.observable(Course);
+    this.Range = ko.observable(Range);
+    this.Penalty = ko.observable(Penalty);
+
+    this.clearFields = function () {
+       if (this.Cumulative()) this.Cumulative().clearFields();
+       if (this.Lap()) this.Lap().clearFields();
+       if (this.Shooting()) this.Shooting().clearFields();
+       if (this.ShootingTime()) this.ShootingTime().clearFields();
+       if (this.Course()) this.Course().clearFields();
+       if (this.Range()) this.Range().clearFields();
+       if (this.Penalty()) this.Penalty().clearFields();
+    }
+}
+
+
+function AnalysisValue(d) {
+    this.FieldId = ko.observable(d.FieldId);
+    this.Value = ko.observable(d.Value);
+    this.Behind = ko.observable(d.Behind);
+    this.Rank = ko.observable(d.Rank);
+
+    this.clearFields = function () {
+        this.Value();
+        this.Behind();
+        this.Rank();
+    }
+}
+
+function AnalysisSector(Description, Value) {
+    this.Description = Description;
+    this.Value = Value;
+}
+
+
+function analysisView(Description, Visual) {
+    this.Description = ko.observable(Description);
+    this.Visual = ko.observable(Visual);
+    this.IsCurrent = ko.observable(false);
+}
+
+
+function parseTimeBehind(V) {
+    var retV = 0.0;
+    var p1 = V.indexOf(":");
+    if (p1 >= 0) {
+        var tMinutes = parseInt(V.substr(0, p1).replace("+",""));
+        var tSec = parseFloat(V.substr(p1 + 1));
+        retV = tSec + tMinutes * 60;
+    } else {
+        retV = parseFloat(V);
+    }
+    return retV;
+}

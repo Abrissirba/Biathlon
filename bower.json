@@ -18,8 +18,7 @@
     "angular-translate": "~2.9.0",
     "angular-material-data-table": "~0.9.9",
     "angular-google-chart": "~0.1.0",
-    "ng-flags": "*",
-    "flag-icon-css-3": "*"
+    "flag-icon-css": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.5"

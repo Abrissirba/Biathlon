@@ -12,6 +12,7 @@ import { abrisCompetitions } from './components/competitions';
 import { abrisResults } from './components/results';
 import { abrisAnalysis } from './components/analysis';
 import { abrisShootingBoard } from './components/shootingBoard';
+import { abrisFlag } from './components/flag';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -32,7 +33,8 @@ import {
     Stats,
     TableHelperService, 
     Analysis,
-    ImageService} from './services/services';
+    ImageService,
+    Countries} from './services/services';
 
 declare var moment: moment.MomentStatic;
 
@@ -50,8 +52,7 @@ module biathlon {
       'restangular',
       'md.data.table',
       'pascalprecht.translate',
-      'googlechart',
-      'ngFlag'])
+      'googlechart'])
     .constant('moment', moment)
     .config(config)
     .config(routerConfig)
@@ -66,6 +67,7 @@ module biathlon {
     .directive('abrisResults', abrisResults)
     .directive('abrisAnalysis', abrisAnalysis)
     .directive('abrisShootingBoard', abrisShootingBoard)
+    .directive('abrisFlag', abrisFlag)
     
     .service('NavbarState', NavbarState)
     
@@ -85,5 +87,6 @@ module biathlon {
     .service('FactCategories', FactCategories)
     .service('StatCategoriesService', StatCategoriesService)
     .service('TableHelperService', TableHelperService)
-    .service('ImageService', ImageService);
+    .service('ImageService', ImageService)
+    .service('Countries', Countries);
 }

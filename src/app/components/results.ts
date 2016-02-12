@@ -31,7 +31,7 @@ export function abrisResults(): angular.IDirective {
                 <tr md-row ng-repeat='result in resultsVm.results'>
                     <td md-cell>{{resultsVm.getRank(result)}}</td>
                     <td md-cell><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img>{{result.Name}}</td>
-                    <td md-cell>{{result.Nat}} <flag country="{{result.Nat.toLowerCase()}}"></flag></td>
+                    <td md-cell><abris-flag md-whiteframe="3" country-code="{{result.Nat}}"></abris-flag></td>
                     <td md-cell>{{result.Shootings}}</td>
                     <td md-cell>{{result.ShootingTotal}}</td>
                     <td md-cell>{{result.TotalTime}}</td>

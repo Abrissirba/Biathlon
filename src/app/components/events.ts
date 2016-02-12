@@ -35,6 +35,20 @@ export function abrisEvents(): angular.IDirective {
             </table>
         </md-table-container>
     </md-card>
+    
+    <md-card ng-repeat="event in eventsVm.events">
+        <div layout="row">
+            <abris-flag  md-whiteframe="3" country-code="{{event.Nat}}"></abris-flag>
+            <div flex="20">{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</div>
+            <div flex>{{event.Organizer}}</div>
+        </div>
+        <div layout="row">
+            <div>{{event.Description}}</div>
+        </div>
+        
+        
+        
+    </md-card>
     `,
     controller: EventsController,
     controllerAs: 'eventsVm',

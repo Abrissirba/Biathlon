@@ -16,3 +16,4 @@ export * from './IStatQuery'
 export * from './ByWhat'
 export * from './ITableQuery'
 export * from './IAnalyzeField';
+export * from './ICountry';
