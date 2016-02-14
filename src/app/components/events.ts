@@ -8,7 +8,12 @@ export function abrisEvents(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-    <!-- <md-card>
+    <abris-topbar>
+        <abris-navbar-toggle></abris-navbar-toggle>
+        <span ng-show="!resultsVm.searchMode" flex>Events</span>
+    </abris-topbar>
+    
+    <md-card ng-if="!eventsVm.mobile">
         <md-toolbar class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <span translate>EVENT_SCHEDULE</span>
@@ -26,27 +31,27 @@ export function abrisEvents(): angular.IDirective {
                 </thead>
                 <tbody md-body>
                 <tr md-row ng-repeat='event in eventsVm.events' ui-sref="app.competitions({eventId: event.EventId})">
-                    <td md-cell>{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</td>
-                    <td md-cell>{{event.Description}}</td>
-                    <td md-cell>{{event.Organizer}}</td>
-                    <td md-cell>{{event.Nat}}</td>
+                    <td md-cell>{{::event.StartDate | date : 'dd MMM yyyy' : timezone}}</td>
+                    <td md-cell>{{::event.Description}}</td>
+                    <td md-cell>{{::event.Organizer}}</td>
+                    <td md-cell>{{::event.Nat}}</td>
                 </tr>
                 </tbody>
             </table>
         </md-table-container>
-    </md-card> -->
+    </md-card>
     
-    <md-card-list>
+    <md-card-list ng-if="eventsVm.mobile">
         <md-card class="list-item" ng-repeat="event in eventsVm.events"  ui-sref="app.competitions({eventId: event.EventId})">
             <div layout="row" layout-align="center center">
                 <div>
-                    <abris-flag  md-whiteframe="3" country-code="{{event.Nat}}"></abris-flag>
+                    <abris-flag country-code="{{::event.Nat}}"></abris-flag>
                 </div>
-                <div class="md-subhead">{{event.Organizer}}</div>
-                <div class="md-caption" flex>{{event.StartDate | date : 'dd MMM yyyy' : timezone}}</div>
+                <div class="md-subhead">{{::event.Organizer}}</div>
+                <div class="md-caption" flex>{{::event.StartDate | date : 'dd MMM yyyy' : timezone}}</div>
             </div>
             <div layout="row" style="padding-top: 4px;">
-                <div>{{event.Description}}</div>
+                <div>{{::event.Description}}</div>
             </div>
         </md-card>
     </md-card-list>
@@ -62,20 +67,30 @@ export function abrisEvents(): angular.IDirective {
 export class EventsController extends TableBaseController<IEvent> {
     
     events: Array<IEvent>;
+    mobile: string;
+    desktop: string;
     
     constructor(
         TableHelperService: TableHelperService,
         Events: Events,
-        private $state: angular.ui.IStateService) {
+        private $state: angular.ui.IStateService,
+        private screenSize: any) {
         
         super(TableHelperService, 'events');
         
         this.promise = Events.getList("1516").then((data) => {
             this.events = data;
         });
+        
+        this.setSizeListeners();
     }
     
-    getLink(event: IEvent){
-        return "";
+    setSizeListeners() {
+        this.mobile = this.screenSize.on('xs', (match) =>{
+            this.mobile = match;
+        });
+        this.desktop = this.screenSize.on('sm, md, lg', (match) => {
+            this.desktop = match;
+        });
     }
 }

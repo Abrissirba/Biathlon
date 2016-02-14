@@ -7,7 +7,8 @@ export class TableBaseController <TEntity> {
     loadedOnce: boolean = false;
     
     query: ITableQuery = {
-        order: 'id'
+        order: 'id',
+        filter: ''
     };
     
     constructor(

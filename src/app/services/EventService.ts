@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IEvent } from '../models/models'
 
+/** @ngInject */
 export class Events extends ApiBaseService<IEvent>{
     
     constructor(Restangular: restangular.IService){

@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { ICompetition } from '../models/models'
 
+/** @ngInject */
 export class Competitions extends ApiBaseService<ICompetition>{
     
     constructor(Restangular: restangular.IService){

@@ -1,5 +1,6 @@
 import { IStatCategory } from '../models/models'
 
+/** @ngInject */
 export class StatCategoriesService {
     categories: Array<IStatCategory> =  [{
         key: 'WC',

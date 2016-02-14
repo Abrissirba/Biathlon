@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { ISeason } from '../models/models'
 
+/** @ngInject */
 export class Seasons extends ApiBaseService<ISeason>{
     
     constructor(Restangular: restangular.IService){

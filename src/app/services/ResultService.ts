@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
-import { IResult, IRelayTeamResult } from '../models/models'
+import { IResult, IRelayResult } from '../models/models'
 
+/** @ngInject */
 export class Results extends ApiBaseService<IResult>{
     
     constructor(Restangular: restangular.IService,
@@ -42,8 +43,8 @@ export class Results extends ApiBaseService<IResult>{
         return defer.promise;
     }
     
-    parseRelayData(data: Array<IResult>) : Array<IRelayTeamResult> {
-        var relayData = new Array<IRelayTeamResult>();
+    parseRelayData(data: Array<IResult>) : Array<IRelayResult> {
+        var relayData = new Array<IRelayResult>();
         
         data.forEach((result: IResult) => {
             if(result.Leg === 0) {
@@ -53,12 +54,12 @@ export class Results extends ApiBaseService<IResult>{
                 });
             }
             else {
-                var relayDataEntry: IRelayTeamResult = this.getRelayTeamEntry(result, relayData);
+                var relayDataEntry: IRelayResult = this.getRelayTeamEntry(result, relayData);
                 relayDataEntry.individualResults.push(result);
             }
         });
         
-        relayData = relayData.sort((a: IRelayTeamResult, b: IRelayTeamResult) => {
+        relayData = relayData.sort((a: IRelayResult, b: IRelayResult) => {
             if(a.teamResult.Rank > b.teamResult.Rank){
                 return 1;
             }
@@ -71,12 +72,24 @@ export class Results extends ApiBaseService<IResult>{
         return relayData;
     }
     
-    getRelayTeamEntry(result: IResult, results: Array<IRelayTeamResult>) : IRelayTeamResult {
+    getRelayTeamEntry(result: IResult, results: Array<IRelayResult>) : IRelayResult {
         for(var i = 0; i < results.length; i++){
             if(results[i].teamResult.Nat === result.Nat) {
                 return results[i];
                 break;
             }
         }
+    }
+    
+    getFlatRelayResult(relayResults: Array<IRelayResult>) : Array<IResult> {
+        var results = new Array<IResult>();
+        relayResults.forEach((relayResult: IRelayResult) => {
+            results.push(relayResult.teamResult);
+            relayResult.individualResults.forEach((result: IResult) => {
+                results.push(result);
+            })
+        });
+        
+        return results;
     }
 }

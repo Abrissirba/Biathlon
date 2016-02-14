@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IStatItem } from '../models/models'
 
+/** @ngInject */
 export class StatItems extends ApiBaseService<IStatItem>{
     
     constructor(Restangular: restangular.IService){

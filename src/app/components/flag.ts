@@ -15,15 +15,15 @@ export function abrisFlag(Countries: Countries): angular.IDirective {
 
             scope.codeType = scope.codeType || 'ISO2';
             
-            // attrs.$observe('flag', function(value) {
-                //var code = scope.$eval(attrs.).toLowerCase();
+            attrs.$observe('countryCode', function(value) {
+                var code = attrs.countryCode.toLowerCase();
                 for (var i = 0; i < Countries.countries.length; i++) {
                     if (Countries.countries[i].code.toLowerCase() === scope.countryCode.toLowerCase()) {
                         scope.country = Countries.countries[i];
                         break;
                     }
                 }
-            // });
+            });
 
         }
     }

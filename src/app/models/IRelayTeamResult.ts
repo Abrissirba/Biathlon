@@ -1,6 +1,6 @@
 import { IResult } from './models'
 
-export interface IRelayTeamResult {
+export interface IRelayResult {
     teamResult: IResult;
     individualResults: Array<IResult>;
 }

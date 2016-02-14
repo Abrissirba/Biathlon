@@ -7,12 +7,14 @@ import { abrisApp } from './components/app';
 import { abrisHome } from './components/home';
 import { abrisNavbar } from './components/navbar/navbar';
 import { abrisTopbar } from './components/navbar/topbar';
+import { abrisNavbarToggle } from './components/navbar/navbarToggle';
 import { abrisEvents } from './components/events';
 import { abrisCompetitions } from './components/competitions';
 import { abrisResults } from './components/results';
 import { abrisAnalysis } from './components/analysis';
 import { abrisShootingBoard } from './components/shootingBoard';
 import { abrisFlag } from './components/flag';
+import { abrisFocus } from './components/inputs/focus';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -52,7 +54,10 @@ module biathlon {
       'restangular',
       'md.data.table',
       'pascalprecht.translate',
-      'googlechart'])
+      'googlechart',
+      'abrissirba.mdComponentDialog',
+      'matchMedia',
+      'anim-in-out'])
     .constant('moment', moment)
     .config(config)
     .config(routerConfig)
@@ -61,6 +66,7 @@ module biathlon {
     .directive('abrisApp', abrisApp)
     .directive('abrisNavbar', abrisNavbar)
     .directive('abrisTopbar', abrisTopbar)
+    .directive('abrisNavbarToggle', abrisNavbarToggle)
     .directive('abrisHome', abrisHome)
     .directive('abrisEvents', abrisEvents)
     .directive('abrisCompetitions', abrisCompetitions)
@@ -68,6 +74,7 @@ module biathlon {
     .directive('abrisAnalysis', abrisAnalysis)
     .directive('abrisShootingBoard', abrisShootingBoard)
     .directive('abrisFlag', abrisFlag)
+    .directive('abrisFocus', abrisFocus)
     
     .service('NavbarState', NavbarState)
     

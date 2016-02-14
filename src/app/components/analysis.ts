@@ -6,13 +6,23 @@ export function abrisAnalysis(): angular.IDirective {
 
   return {
     restrict: 'E',
+    scope: {
+        raceId: '=',
+        ibuId: '='
+    },
     template: `
-        <div google-chart chart='analysisVm.progressionChart' style='border:1px inset black;padding:0;width:1000px'></div>
+        <md-card class="diagram">
+            <md-radio-group class="options" ng-model="analysisVm.selectedDiagram" layout="row" layout-align="end center">
+                <md-radio-button value="rank" ><span translate> RANK </span></md-radio-button>
+                <md-radio-button value="behind"><span translate> BEHIND </span></md-radio-button>
+            </md-radio-group>
+            <div class="chart" google-chart chart='analysisVm.progressionChart'></div>
+        </md-card>
         
         <md-card>
-            <div layout="row" layout-xs="column">
+            <div class="lap-analysis-container" layout="row" layout-xs="column" layout-sm="column">
    
-                <div layout="column" layout-align="center center" class="column row-descriptions" show-gt-sm>
+                <div layout="column" layout-align="center center" class="column row-descriptions" hide-xs hide-sm>
                     <div class="md-caption" translate>CUMULATIVE</div>
                     <div class="md-caption" translate>LAP</div>
                     <div class="md-caption" translate>RANGE</div> 
@@ -24,7 +34,7 @@ export function abrisAnalysis(): angular.IDirective {
     
                 <div layout="column" ng-repeat="lap in analysisVm.lapAnalyze" layout-align="center center">
                     <div class="md-subhead">Lap {{$index + 1}}</div>
-                    <md-card flex>
+                    <md-card>
                         <div layout="row">
                             <!-- <div layout="column" class="column">
                                 <div></div><div></div><div></div><div></div>
@@ -80,6 +90,9 @@ export function abrisAnalysis(): angular.IDirective {
 
 /** @ngInject */
 export class AnalysisController {
+    ibuId: string;
+    raceId: string;
+    selectedDiagram: string;
   
     nrOfLaps: number;
     lapAnalyze: Array<any>;
@@ -88,18 +101,24 @@ export class AnalysisController {
     progressionChart: angular.googleChart.IChart<google.visualization.LineChartOptions>;
     
     constructor(
-        private Analysis: Analysis) {
-        
-        Analysis.getList('BT1516SWRLCP05SWIN', 'BTSWE21607199101').then((data) => {
+        private Analysis: Analysis,
+        private $scope: angular.IScope) {
+
+        Analysis.getList(this.raceId, this.ibuId).then((data) => {
             this.nrOfLaps = Analysis.getNrOfLaps(data);
             this.lapAnalyze = Analysis.getLapAnalyzation(data, this.nrOfLaps);
             this.progressionAnalyze = Analysis.getProgressionAnalyzation(data, this.nrOfLaps);
-            
-            console.log(this.lapAnalyze);
-            console.log(this.progressionAnalyze);
-            
+                        
             this.initProgressionsDiagram(this.progressionAnalyze, 'rank');
         });
+        
+        $scope.$watch('analysisVm.selectedDiagram', (newVal: string, oldVal: string) => {
+           if (newVal !== oldVal) {
+               this.selectDiagram(newVal);
+           } 
+        });
+        
+        this.selectedDiagram = 'rank';
     }
     
     parseDate(behind: string) : Date {
@@ -121,6 +140,10 @@ export class AnalysisController {
     
     parseRank(rank: string) : number {
         return parseInt(rank.match(/\d+/)[0]);
+    }
+    
+    selectDiagram(diagramType: string) {
+        this.initProgressionsDiagram(this.progressionAnalyze, diagramType);
     }
     
     initProgressionsDiagram(fields: Array<IAnalyzeField>, type: string){
@@ -159,11 +182,21 @@ export class AnalysisController {
                     direction: -1,
                     format: type === 'rank' ? '' : 'mm:ss',
                     gridlines: {
-                        count: 10
+                        count: 5
                     }
+                    // ,
+                    // baseline: 1,
+                    // minValue: 1,
+                    // maxValue: 50,
+                    // ticks: [5,10,15,20, 25, 30, 35, 40, 45, 50, 55, 60]
                 },
                 hAxis: {
                     title: 'Control'
+                },
+                height: 250,
+                animation: {
+                    startup: false,
+                    duration: 0
                 }
             },
 

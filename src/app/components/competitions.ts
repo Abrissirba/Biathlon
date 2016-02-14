@@ -8,7 +8,12 @@ export function abrisCompetitions(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-    <!-- <md-card>
+    <abris-topbar>
+        <abris-navbar-toggle></abris-navbar-toggle>
+        <span ng-show="!resultsVm.searchMode" flex>Competitions</span>
+    </abris-topbar>
+    
+    <md-card ng-if="!competitionsVm.mobile">
         <md-toolbar class="md-table-toolbar md-default">
             <div class="md-toolbar-tools">
                 <span translate>EVENT_DETAILS</span>
@@ -34,9 +39,9 @@ export function abrisCompetitions(): angular.IDirective {
                 </tbody>
             </table>
         </md-table-container>
-    </md-card> -->
+    </md-card>
     
-    <md-card-list>
+    <md-card-list ng-if="competitionsVm.mobile">
         <md-card class="list-item" ng-repeat="competition in competitionsVm.competitions"  ui-sref="app.results({raceId: competition.RaceId})">
             <div layout="row" layout-align="center center">
                 <div class="md-caption">{{competition.StartTime | date : 'dd MMM yyyy' : timezone}}</div>
@@ -60,11 +65,14 @@ export class CompetitionsController extends TableBaseController<ICompetition> {
     
     competitions: Array<ICompetition>;
     eventId: string;
+    mobile: string;
+    desktop: string;
     
     constructor(
         TableHelperService: TableHelperService,
         Competitions: Competitions,
-        private $state: angular.ui.IStateService) {
+        private $state: angular.ui.IStateService,
+        private screenSize: any) {
         
         super(TableHelperService, 'competitions');
         
@@ -72,6 +80,17 @@ export class CompetitionsController extends TableBaseController<ICompetition> {
         
         this.promise = Competitions.getList(this.eventId).then((data) => {
             this.competitions = data;
+        });
+        
+        this.setSizeListeners();
+    }
+    
+    setSizeListeners() {
+        this.mobile = this.screenSize.on('xs', (match) =>{
+            this.mobile = match;
+        });
+        this.desktop = this.screenSize.on('sm, md, lg', (match) => {
+            this.desktop = match;
         });
     }
 }

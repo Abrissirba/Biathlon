@@ -1,5 +1,15 @@
 abris-analysis {
-       
+    
+    .diagram {
+        .options {
+            padding: 8px;
+        }
+        
+        .chart {
+            height: 250px;
+        }
+    }
+    
     md-card {
         .column {
             padding: 0 8px 0 8px;
@@ -17,6 +27,12 @@ abris-analysis {
         }
         font-size: 12px;
         letter-spacing: 0.020em;
+    }
+    
+    .lap-analysis-container {
+        @media screen and (min-width: 960px) {
+            margin-right: 20px;
+        }
     }
 }
 

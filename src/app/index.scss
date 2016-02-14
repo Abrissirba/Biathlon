@@ -85,7 +85,7 @@ table {
     
     abris-flag {
         span {
-            font-size: 26px;
+            font-size: 20px;
         }
     }
 }
@@ -123,8 +123,15 @@ md-card-list {
     }
 }
 
-.no-padding {
-    padding: 0;
+abris-topbar {
+    md-input-container {
+        .md-input {
+            color: #fff;
+        }
+    }
+    .md-toolbar-tools abris-navbar-toggle {
+        margin-left: -16px;
+    }
 }
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
@@ -132,3 +139,102 @@ md-card-list {
  */
 // injector
 // endinjector
+// 
+// .anim-in-out.anim-in-setup.anim-slide-left, .anim-in-out.anim-in-setup .anim-slide-left {
+//   -webkit-transform: translateX(100%);
+//       -ms-transform: translateX(100%);
+//           transform: translateX(100%); }
+// 
+// .anim-in-out.anim-in-setup.anim-slide-right, .anim-in-out.anim-in-setup .anim-slide-right {
+//   -webkit-transform: translateX(-100%);
+//       -ms-transform: translateX(-100%);
+//           transform: translateX(-100%); }
+// 
+// .anim-in-out.anim-in.anim-slide-left, .anim-in-out.anim-in .anim-slide-left {
+//   -webkit-transform: translateX(0);
+//       -ms-transform: translateX(0);
+//           transform: translateX(0);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+// 
+// .anim-in-out.anim-in.anim-slide-right, .anim-in-out.anim-in .anim-slide-right {
+//   -webkit-transform: translateX(0);
+//       -ms-transform: translateX(0);
+//           transform: translateX(0);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+// 
+// .anim-in-out.anim-out-setup.anim-slide-left, .anim-in-out.anim-out-setup .anim-slide-left {
+//   -webkit-transform: translateX(0);
+//       -ms-transform: translateX(0);
+//           transform: translateX(0);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+// 
+// .anim-in-out.anim-out-setup.anim-slide-right, .anim-in-out.anim-out-setup .anim-slide-right {
+//   -webkit-transform: translateX(0);
+//       -ms-transform: translateX(0);
+//           transform: translateX(0);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+// 
+// 
+// .anim-in-out.anim-out.anim-slide-left, .anim-in-out.anim-out .anim-slide-left {
+//   -webkit-transform: translateX(-100%);
+//       -ms-transform: translateX(-100%);
+//           transform: translateX(-100%);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+// 
+// .anim-in-out.anim-out.anim-slide-right, .anim-in-out.anim-out .anim-slide-right {
+//   -webkit-transform: translateX(100%);
+//       -ms-transform: translateX(100%);
+//           transform: translateX(100%);
+//   -webkit-transition: all 500ms;
+//           transition: all 500ms; }
+/* Have to set height explicity on ui-view 
+to prevent collapsing during animation*/
+.ui-view-container {
+  position: relative;
+  height: 65px;
+}
+
+
+
+.view-anim.ng-enter, view-anim.ng-leave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -o-transition:all .5s ease-in-out;
+    transition:all .5s ease-in-out;
+}
+
+.view-anim.ng-enter {
+  opacity: 0;
+  -webkit-transform:scale3d(0.5, 0.5, 0.5);
+  -moz-transform:scale3d(0.5, 0.5, 0.5);
+  transform:scale3d(0.5, 0.5, 0.5);
+}
+
+.view-anim.ng-enter-active {
+  opacity: 1;
+  -webkit-transform:scale3d(1, 1, 1);
+  -moz-transform:scale3d(1, 1, 1);
+  transform:scale3d(1, 1, 1);
+}
+
+.view-anim.ng-leave {
+  opacity: 1; 
+  -webkit-transform:translate3d(0, 0, 0);
+  -moz-transform:translate3d(0, 0, 0);
+  transform:translate3d(0, 0, 0);
+}
+
+.view-anim.ng-leave-active {
+  opacity: 0;
+  -webkit-transform:translate3d(100px, 0, 0);
+  -moz-transform:translate3d(100px, 0, 0);
+  transform:translate3d(100px, 0, 0);
+}

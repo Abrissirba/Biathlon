@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IStat, IStatQuery } from '../models/models'
 
+/** @ngInject */
 export class Stats extends ApiBaseService<IStat>{
     
     constructor(Restangular: restangular.IService){

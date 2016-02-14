@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IBio } from '../models/models'
 
+/** @ngInject */
 export class Bios extends ApiBaseService<IBio>{
     
     constructor(Restangular: restangular.IService){

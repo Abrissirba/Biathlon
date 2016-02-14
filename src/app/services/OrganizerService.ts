@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IOrganizer } from '../models/models'
 
+/** @ngInject */
 export class Organizers extends ApiBaseService<IOrganizer>{
     
     constructor(Restangular: restangular.IService){

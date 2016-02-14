@@ -14,7 +14,7 @@ export function abrisNavbar(): angular.IDirective {
 
             <ng-transclude></ng-transclude>
             
-                <md-button ui-sref='{{ item.state }}' ng-repeat="item in navbarVm.items" md-ink-ripple>
+                <md-button ui-sref='{{ item.state }}' ng-click="navbarVm.toggleNavbar()" ng-repeat="item in navbarVm.items" md-ink-ripple>
                     <div layout="row">
                         <md-icon md-font-library='material-icons'>{{item.icon}}</md-icon>
                         <span>{{ item.title | translate }}</span>

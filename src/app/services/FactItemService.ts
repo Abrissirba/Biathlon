@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IFactItem } from '../models/models'
 
+/** @ngInject */
 export class FactItems extends ApiBaseService<IFactItem>{
     
     constructor(Restangular: restangular.IService){

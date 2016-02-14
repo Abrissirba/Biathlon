@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { IAnalyzeField } from '../models/models'
 
+/** @ngInject */
 export class Analysis extends ApiBaseService<IAnalyzeField>{
     
     constructor(Restangular: restangular.IService){

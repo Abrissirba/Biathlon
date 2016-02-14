@@ -1,6 +1,7 @@
 import { ApiBaseService } from './ApiBaseService'
 import { ICup } from '../models/models'
 
+/** @ngInject */
 export class Cups extends ApiBaseService<ICup>{
     
     constructor(Restangular: restangular.IService){
