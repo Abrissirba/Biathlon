@@ -12,7 +12,7 @@ export class Seasons extends ApiBaseService<ISeason>{
         return data;
     }
 
-    getList(raceId: string): restangular.ICollectionPromise<ISeason>{
-        return this.Service.getList<ISeason>();
+    getList(): restangular.ICollectionPromise<ISeason>{
+        return this.Service.withHttpConfig({cache: true}).getList<ISeason>();
     }
 }

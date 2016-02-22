@@ -1,6 +1,7 @@
-import { Results, ImageService, TableHelperService } from '../services/services';
-import { IResult, IRelayResult } from '../models/models';
+import { Results, ImageService, TableHelperService, Competitions } from '../services/services';
+import { IResult, IRelayResult, ICompetition } from '../models/models';
 import { TableBaseController } from './TableBaseComponent';
+import { NavbarState } from './navbar/navbarState';
 
 /** @ngInject */
 export function abrisResults(): angular.IDirective {
@@ -22,10 +23,13 @@ export class ResultsController extends TableBaseController<IResult> {
     _results: Array<IResult>;
     relayResults: Array<IRelayResult>;
     _relayResults: Array<IRelayResult>;
-    raceId: string;
     searchString: string;
     mobile: string;
     desktop: string;
+    seasonId: string;
+    eventId: string;
+    raceId: string;
+    competition: ICompetition;
     
     orderProps = [{
         title: 'RANK',
@@ -49,13 +53,39 @@ export class ResultsController extends TableBaseController<IResult> {
         private $scope: angular.IScope,
         private $mdDialog: any,
         private $element: any,
-        private screenSize: any) {
+        private screenSize: any,
+        private $timeout: angular.ITimeoutService,
+        private NavbarState: NavbarState,
+        private Competitions: Competitions) {
         
         super(TableHelperService, 'results', {order: 'Rank'});
         
         $scope.$watch('resultsVm.searchString', (val: string) => this.filter(val))
         
+        this.seasonId = this.$state.params['seasonId'];
+        this.eventId = this.$state.params['eventId'];
         this.raceId = this.$state.params['raceId'];
+        
+        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
+            competitions.forEach((competition: ICompetition) => {
+                if (competition.RaceId === this.raceId) {
+                    this.competition = competition; 
+                }
+            });
+        });
+        
+        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
+            var items = [];
+            competitions.forEach((competition: ICompetition) => {
+                items.push({
+                   title: competition.ShortDescription,
+                   active: competition.RaceId === this.raceId,
+                   state: 'app.results({seasonId: "' + this.seasonId + '", eventId: "' + this.eventId + '", raceId: "' + competition.RaceId + '"})'
+                });
+            });
+            this.NavbarState.items = items;
+        });
+        
         
         this.promise = Results.getList(this.raceId).then((data) => {
             if (angular.isDefined(data[0].Leg) && data[0].Leg !== null) {
@@ -67,10 +97,11 @@ export class ResultsController extends TableBaseController<IResult> {
                 this.results = data;
             }
             this.onReorder('Rank');
+            this.setVerticalContainerHeight();
         });
         
         this.setSizeListeners();
-        this.setVerticalContainerHeight();
+        
     }
     
     setSizeListeners() {
@@ -83,15 +114,17 @@ export class ResultsController extends TableBaseController<IResult> {
     }
     
     setVerticalContainerHeight() {
-        var elements = this.$element.find('md-virtual-repeat-container');
-        for (var i = 0; i < elements.length; i++) {
-            var element = elements[i];
-            var height = window.innerHeight - element.offsetTop;
+        this.$timeout(() => {
+            var elements = this.$element.find('md-virtual-repeat-container');
+            for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                var height = window.innerHeight - element.offsetTop;
 
-            element.style.height = height + 'px';
-            console.log(element);
-        }
-        
+                element.style.height = height + 'px';
+                console.log(element);
+            }
+            this.$scope.$broadcast('$md-resize');
+        });
     }
     
     filter(val: string){

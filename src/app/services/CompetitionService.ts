@@ -13,7 +13,7 @@ export class Competitions extends ApiBaseService<ICompetition>{
     }
 
     getList(eventId: string): restangular.ICollectionPromise<ICompetition>{
-        return this.Service.getList<ICompetition>({
+        return this.Service.withHttpConfig({cache: true}).getList<ICompetition>({
             eventId: eventId
         });
     }

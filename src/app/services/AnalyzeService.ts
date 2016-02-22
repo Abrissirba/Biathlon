@@ -86,11 +86,11 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
     getNrOfLaps(fields: Array<IAnalyzeField>) : number {
         var length = fields.length;
         var laps = 0;
-        fields.forEach((field) => {
-            if(field.FieldId.indexOf("A0" + (laps + 1)) > -1){
-                return ++laps;
+        for (var i = 0; i < length; i++) {
+            if(fields[i].FieldId.indexOf("A0" + (laps + 1)) > -1){
+                ++laps;
             }
-        });
+        }
         
         return laps;
     }

@@ -1,16 +1,18 @@
 /** @ngInject */
 export function config(
-    $logProvider: angular.ILogProvider, 
-    toastrConfig: any,
-    RestangularProvider: restangular.IProvider) {
+    $logProvider: angular.ILogProvider,
+    $translateProvider: any
+    ) {
     // enable log
     $logProvider.debugEnabled(true);
-    // set options third-party lib
-    toastrConfig.allowHtml = true;
-    toastrConfig.timeOut = 3000;
-    toastrConfig.positionClass = 'toast-top-right';
-    toastrConfig.preventDuplicates = true;
-    toastrConfig.progressBar = true;
 
-    
+
+    $translateProvider
+        .useStaticFilesLoader({
+            prefix: '/assets/i18n/',
+            suffix: '.json'
+        })
+        .preferredLanguage('en')
+        .fallbackLanguage('en')
+        .useSanitizeValueStrategy('escaped');
 }

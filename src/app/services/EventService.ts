@@ -13,7 +13,7 @@ export class Events extends ApiBaseService<IEvent>{
     }
 
     getList(seasonId: string): restangular.ICollectionPromise<IEvent>{
-        return this.Service.getList<IEvent>({
+        return this.Service.withHttpConfig({cache: true}).getList<IEvent>({
             SeasonId: seasonId,
             level: 1
         });

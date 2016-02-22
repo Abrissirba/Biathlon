@@ -14,6 +14,7 @@ import { abrisResults } from './components/results';
 import { abrisAnalysis } from './components/analysis';
 import { abrisShootingBoard } from './components/shootingBoard';
 import { abrisFlag } from './components/flag';
+import { abrisLanguageSelector } from './components/languageSelector';
 import { abrisFocus } from './components/inputs/focus';
 
 import { NavbarState } from './components/navbar/navbarState';
@@ -75,6 +76,7 @@ module biathlon {
     .directive('abrisShootingBoard', abrisShootingBoard)
     .directive('abrisFlag', abrisFlag)
     .directive('abrisFocus', abrisFocus)
+    .directive('abrisLanguageSelector', abrisLanguageSelector)
     
     .service('NavbarState', NavbarState)
     

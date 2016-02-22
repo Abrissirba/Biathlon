@@ -13,6 +13,6 @@ export class FactItems extends ApiBaseService<IFactItem>{
     }
 
     getList(): restangular.ICollectionPromise<IFactItem>{
-        return this.Service.getList<IFactItem>();
+        return this.Service.withHttpConfig({cache: true}).getList<IFactItem>();
     }
 }

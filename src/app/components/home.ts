@@ -1,3 +1,5 @@
+import { NavbarState } from './navbar/navbarState'
+
 /** @ngInject */
 export function abrisHome(): angular.IDirective {
 
@@ -6,7 +8,8 @@ export function abrisHome(): angular.IDirective {
     template: `
         <abris-topbar>
             <abris-navbar-toggle></abris-navbar-toggle>
-            <span flex>HOME</span>
+            <span flex translate>HOME</span>
+            <abris-language-selector></abris-language-selector>
         </abris-topbar>
     `,
     controller: HomeController,
@@ -19,7 +22,21 @@ export function abrisHome(): angular.IDirective {
 /** @ngInject */
 export class HomeController {
     
-    constructor(private $http: angular.IHttpService) {
+    constructor(
+        private NavbarState: NavbarState) {
         
+        this.NavbarState.items = [{
+            title: "SCHEDULE_AND_RESULTS",
+            state: 'app.schedule({seasonId: 1516})'
+        }, {
+            title: "STANDINGS",
+            state: 'app.cups'
+        }, {
+            title: "ATHLETES",
+            state: 'app.athletes'
+        }, {
+            title: "STATISTICS",
+            state: 'app.stats'
+        }];
     }
 }

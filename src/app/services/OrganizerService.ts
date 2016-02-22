@@ -13,6 +13,6 @@ export class Organizers extends ApiBaseService<IOrganizer>{
     }
 
     getList(): restangular.ICollectionPromise<IOrganizer>{
-        return this.Service.getList<IOrganizer>();
+        return this.Service.withHttpConfig({cache: true}).getList<IOrganizer>();
     }
 }

@@ -13,7 +13,7 @@ export class Bios extends ApiBaseService<IBio>{
     }
 
     getList(IBUId: string): restangular.ICollectionPromise<IBio>{
-        return this.Service.getList<IBio>({
+        return this.Service.withHttpConfig({cache: true}).getList<IBio>({
             IBUId: IBUId
         });
     }

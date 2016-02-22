@@ -10,15 +10,15 @@ export function routerConfig($stateProvider: angular.ui.IStateProvider, $urlRout
         template: temp('abrisHome')
     })
     .state('app.schedule', {
-        url: 'schedule',
+        url: 'schedule/:seasonId',
         template: temp('abrisEvents')
     })
     .state('app.competitions', {
-        url: 'competitions/:eventId',
+        url: 'schedule/:seasonId/competitions/:eventId',
         template: temp('abrisCompetitions')
     })
     .state('app.results', {
-        url: 'results/:raceId',
+        url: 'schedule/:seasonId/competitions/:eventId/results/:raceId',
         template: temp('abrisResults')
     })
     .state('app.cups', {

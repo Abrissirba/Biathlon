@@ -13,7 +13,7 @@ export class StatItems extends ApiBaseService<IStatItem>{
     }
 
     getList(): restangular.ICollectionPromise<IStatItem>{
-        return this.Service.getList<IStatItem>({
+        return this.Service.withHttpConfig({cache: true}).getList<IStatItem>({
             Availability: 2
         });
     }

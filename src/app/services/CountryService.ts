@@ -156,7 +156,7 @@ export class Countries {
         title: 'Slovakia',
         code: 'SVK',
         ISO3: 'SVK',
-        ISO2: 'SV'
+        ISO2: 'SK'
     },{
         title: 'Slovenia',
         code: 'SLO',

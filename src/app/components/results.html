@@ -1,7 +1,7 @@
 <abris-topbar>
     <abris-navbar-toggle></abris-navbar-toggle>
     
-    <span ng-show="!resultsVm.searchMode">Results</span>
+    <span ng-show="!resultsVm.searchMode">{{resultsVm.competition.ShortDescription}}</span>
     
     <span ng-show="resultsVm.searchMode" layout="row">
         <md-icon class="material-icons">search</md-icon>
@@ -32,43 +32,42 @@
         </md-menu-content>
     </md-menu>
 </abris-topbar>
-    
-<md-card ng-if="!resultsVm.mobile">
-    <md-table-container>
-        <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
-            <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
-            <tr md-row>
-                <th md-column md-numeric md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
-                <th md-column md-order-by='Name' style="width: 50%"><span translate>NAME</span></th>
-                <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
-                <th md-column md-order-by='Shootings' style="width: 10%"><span translate>SHOOTING</span></th>
-                <th md-column md-order-by='ShootingTotal' style="width: 5%"><span translate>TOTAL</span></th>
-                <th md-column md-order-by='TotalTime' style="width: 10%"><span translate>TIME</span></th>
-                <th md-column md-order-by='Behind' style="width: 5%"><span translate>BEHIND</span></th>
-            </tr>
-            </thead>
-            <tbody md-body>
-                <tr md-row ng-repeat='result in resultsVm.results track by result.IBUId'  ng-click="resultsVm.openAnalysis(result)">
-                    <td md-cell><span ng-if="resultsVm._results || result.Leg === 0">{{::resultsVm.getRank(result)}}</span></td>
-                    <td md-cell>
-                        <img  ng-if="resultsVm._results || result.Leg !== 0" class="md-avatar" ng-src="{{::resultsVm.getAvatarUrl(result)}}"></img>
-                        {{::result.Name}}</td>
-                    <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
-                    <td md-cell>{{::result.Shootings}}</td>
-                    <td md-cell>{{::result.ShootingTotal}}</td>
-                    <td md-cell>{{::result.TotalTime}}</td>
-                    <td md-cell>{{::result.Behind}}</td>
+<md-content>
+    <md-card ng-if="!resultsVm.mobile">
+        <md-table-container>
+            <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
+                <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
+                <tr md-row>
+                    <th md-column md-numeric md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
+                    <th md-column md-order-by='Name' style="width: 50%"><span translate>NAME</span></th>
+                    <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
+                    <th md-column md-order-by='Shootings' style="width: 10%"><span translate>SHOOTING</span></th>
+                    <th md-column md-order-by='ShootingTotal' style="width: 5%"><span translate>TOTAL</span></th>
+                    <th md-column md-order-by='TotalTime' style="width: 10%"><span translate>TIME</span></th>
+                    <th md-column md-order-by='Behind' style="width: 5%"><span translate>BEHIND</span></th>
                 </tr>
-                
-            </tbody>
-        </table>
-    </md-table-container>
-</md-card> 
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat='result in resultsVm.results track by $id(result)'  ng-click="resultsVm.openAnalysis(result)">
+                        <td md-cell><span ng-if="resultsVm._results || result.Leg === 0">{{::resultsVm.getRank(result)}}</span></td>
+                        <td md-cell>
+                            <img  ng-if="resultsVm._results || result.Leg !== 0" class="md-avatar" ng-src="{{::resultsVm.getAvatarUrl(result)}}"></img>
+                            {{::result.Name}}</td>
+                        <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
+                        <td md-cell>{{::result.Shootings}}</td>
+                        <td md-cell>{{::result.ShootingTotal}}</td>
+                        <td md-cell>{{::result.TotalTime}}</td>
+                        <td md-cell>{{::result.Behind}}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </md-table-container>
+    </md-card> 
     
-<md-card-list>
-    <md-virtual-repeat-container>
-        <div ng-if="resultsVm.mobile">
-            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)">
+    <md-card-list ng-if="resultsVm.mobile">
+        <md-virtual-repeat-container  ng-if="resultsVm._results">
+            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
                 <div layout="row" layout-align="center center">
                     <div class="md-subhead">{{resultsVm.getRank(result)}}</div>
                     <div class="no-padding"><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
@@ -92,8 +91,10 @@
                     </div>
                 </div>
             </md-card>
-    
-            <md-card class="list-item" ng-repeat="result in resultsVm.relayResults" ng-if="resultsVm._relayResults">
+        </md-virtual-repeat-container>
+        
+        <md-virtual-repeat-container ng-if="resultsVm._relayResults">
+            <md-card class="list-item" md-virtual-repeat="result in resultsVm.relayResults">
                 <div layout="row" layout-align="center center">
                     <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
                     <div>{{result.teamResult.Name}}</div>
@@ -140,6 +141,6 @@
                 </span>
 
             </md-card>
-        </div>
-    </md-virtual-repeat-container>
-</md-card-list>
+        </md-virtual-repeat-container>
+    </md-card-list>
+</md-content>

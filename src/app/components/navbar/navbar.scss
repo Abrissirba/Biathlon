@@ -1,11 +1,110 @@
+$background-color: #333;
+$text-color: #fff;
 abris-navbar {
     position: static;
     display: block;
+    box-shadow: rgba(51, 51, 51, 0.28) 4px 0px 5px -2px;
+    
+    $navbar-width: 200px;
+
+    md-content {
+        background: $background-color;
+        color: $text-color;
+        height: calc(100% - 170px);
+    }
     
     md-sidenav {
-        width: 250px;
-        min-width: 250px;
-        max-width: 250px;
+        background: $background-color;
+        color: $text-color;
+        box-shadow: rgba(51, 51, 51, 0.28) 4px 0px 5px -2px;
+        width: $navbar-width;
+        min-width: $navbar-width;
+        max-width: $navbar-width;
         height: 100%;
+        
+        md-icon {
+            color: #fff;
+        }        
+    }
+    
+    md-toolbar {
+        div {
+            padding-left: 8px;
+        }
+    }
+    
+    .navbar-items {
+        .md-button {
+            margin: 0;
+            padding: 3px 16px 4px 16px;
+            border-radius: 0;
+            
+            &.active {
+                background-color: #666;
+            }
+            
+            md-icon {
+                margin-right: 8px;
+            }
+                
+            &.navbar-back {
+                min-height: 50px;
+                > div {
+                    line-height: 50px;
+                } 
+            }
+        }
+        
+    }
+
+    
+    header {
+        height: 170px;
+        display: block;
+        box-shadow: rgba(125, 125, 125, 0.71) 0px 0px 2px 0px;
+        border-bottom: 1px solid #444;
+        box-sizing: border-box;
+        
+        a.md-button {
+            display: block;
+            margin: 0;
+            padding: 0;
+            
+            &:not([disabled]):hover {
+                background-color: transparent;
+            }
+            
+            div {
+                margin-top: -10px;
+            }
+        }
+        
+        img {
+            max-height: 130px;
+            min-height: 130px;
+            min-width: $navbar-width;
+            max-width: $navbar-width;
+        }
+    }
+}
+
+abris-topbar {
+    display: block;
+    md-toolbar:not(.md-menu-toolbar) {
+        background: $background-color;
+        color: #fff;
+    }
+    
+    .md-toolbar-tools {
+        padding: 0 0 0 16px;
+    }
+    
+    md-input-container {
+        .md-input {
+            color: #fff;
+        }
+    }
+    .md-toolbar-tools abris-navbar-toggle .md-button {
+        margin-left: -16px;
     }
 }

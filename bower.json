@@ -16,6 +16,8 @@
     "restangular": "~1.5.1",
     "angular-deferred-bootstrap": "~0.1.9",
     "angular-translate": "~2.9.0",
+    "angular-translate-loader-static-files": "~2.8.1",
+    "angular-translate-interpolation-messageformat": "~2.8.1",
     "angular-material-data-table": "~0.9.9",
     "angular-google-chart": "~0.1.0",
     "flag-icon-css": "*",
@@ -27,6 +29,7 @@
     "angular-mocks": "~1.5"
   },
   "resolutions": {
-    "angular": "~1.5"
+    "angular": "~1.5",
+    "angular-translate": "~2.9.0"
   }
 }

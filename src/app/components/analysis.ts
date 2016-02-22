@@ -36,10 +36,6 @@ export function abrisAnalysis(): angular.IDirective {
                     <div class="md-subhead">Lap {{$index + 1}}</div>
                     <md-card>
                         <div layout="row">
-                            <!-- <div layout="column" class="column">
-                                <div></div><div></div><div></div><div></div>
-                                <div>{{lap.Shooting.Value}}</div>
-                            </div> -->
                             <div layout="column" class="column"  layout-align="end end" hide-gt-sm>
                                 <div class="md-caption"><span translate>CUMULATIVE</span>:</div>
                                 <div class="md-caption" ><span translate>LAP</span>:</div>
@@ -48,28 +44,28 @@ export function abrisAnalysis(): angular.IDirective {
                                 <div class="md-caption" ><span translate>SHOOTING</span>:</div>  
                             </div>
                             <div layout="column" class="column"  layout-align="end end">
-                                <div class="md-body-2" translate>TIME</div>
-                                <div>{{lap.Cummulative.Value || '&nbsp;'}}</div>
-                                <div>{{lap.Lap.Value || '&nbsp;'}}</div>
-                                <div>{{lap.Range.Value|| '&nbsp;'}}</div> 
-                                <div>{{lap.Course.Value|| '&nbsp;'}}</div>
-                                <div>{{lap.ShootingTime.Value|| '&nbsp;'}}</div> 
+                                <div class="column-title" translate>TIME</div>
+                                <div>{{::lap.Cummulative.Value || '&nbsp;'}}</div>
+                                <div>{{::lap.Lap.Value || '&nbsp;'}}</div>
+                                <div>{{::lap.Range.Value|| '&nbsp;'}}</div> 
+                                <div>{{::lap.Course.Value|| '&nbsp;'}}</div>
+                                <div>{{::lap.ShootingTime.Value|| '&nbsp;'}}</div> 
                             </div>
                             <div layout="column" class="column" layout-align="end end">
-                                <div class="md-body-2" translate>BEHIND</div>
-                                <div>{{lap.Cummulative.Behind|| '&nbsp;'}}</div>
-                                <div>{{lap.Lap.Behind || '&nbsp;'}}</div>
-                                <div>{{lap.Range.Behind|| '&nbsp;'}}</div> 
-                                <div>{{lap.Course.Behind|| '&nbsp;'}}</div>
-                                <div>{{lap.ShootingTime.Behind|| '&nbsp;'}}</div>  
+                                <div class="column-title" translate>BEHIND</div>
+                                <div>{{::lap.Cummulative.Behind|| '&nbsp;'}}</div>
+                                <div>{{::lap.Lap.Behind || '&nbsp;'}}</div>
+                                <div>{{::lap.Range.Behind|| '&nbsp;'}}</div> 
+                                <div>{{::lap.Course.Behind|| '&nbsp;'}}</div>
+                                <div>{{::lap.ShootingTime.Behind|| '&nbsp;'}}</div>  
                             </div>
                             <div layout="column" class="column" layout-align="end end">
-                                <div class="md-body-2" translate>RANK</div>
-                                <div>{{lap.Cummulative.Rank|| '&nbsp;'}}</div>
-                                <div>{{lap.Lap.Rank || '&nbsp;'}}</div>
-                                <div>{{lap.Range.Rank|| '&nbsp;'}}</div> 
-                                <div>{{lap.Course.Rank|| '&nbsp;'}}</div>
-                                <div>{{lap.ShootingTime.Rank|| '&nbsp;'}}</div>  
+                                <div class="column-title" translate>RANK</div>
+                                <div>{{::lap.Cummulative.Rank|| '&nbsp;'}}</div>
+                                <div>{{::lap.Lap.Rank || '&nbsp;'}}</div>
+                                <div>{{::lap.Range.Rank|| '&nbsp;'}}</div> 
+                                <div>{{::lap.Course.Rank|| '&nbsp;'}}</div>
+                                <div>{{::lap.ShootingTime.Rank|| '&nbsp;'}}</div>  
                             </div>
                         </div>
                         <div layout="row" layout-align="center center">
@@ -130,7 +126,11 @@ export class AnalysisController {
             ms = parseInt(splits[1].split('.')[1]) * 100;
         }
         else if(splits.length === 1){
-            seconds = parseInt(splits[0].split('.')[0].substr(1));
+            var sec = splits[0].split('.')[0];
+            if(sec.indexOf('+') > -1){
+                sec = sec.substr(1);
+            }
+            seconds = parseInt(sec);
             ms = parseInt(splits[0].split('.')[1]) * 100;
         }
         
@@ -149,7 +149,12 @@ export class AnalysisController {
     initProgressionsDiagram(fields: Array<IAnalyzeField>, type: string){
         
         var rows = [];
+        var highestRank = 1;
         fields.forEach((field) => {
+            if (type === 'rank' && this.parseRank(field.Rank) > highestRank) {
+                highestRank = this.parseRank(field.Rank);
+            }
+            
             rows.push({
                c: [{
                    v: field.FieldId
@@ -159,8 +164,14 @@ export class AnalysisController {
                }] 
             });
         });
+        
+        var ticks = [1];
+        var length = highestRank / 5 + 1;
+        for (var i = 1; i < length; i++) {
+            ticks.push(i*5);
+        }
 
-        this.progressionChart =  {
+        this.progressionChart = {
             type: 'LineChart',
             data: {
                 cols: [{
@@ -181,14 +192,8 @@ export class AnalysisController {
                     title: type === 'rank' ? 'Rank' : 'Time behind',
                     direction: -1,
                     format: type === 'rank' ? '' : 'mm:ss',
-                    gridlines: {
-                        count: 5
-                    }
-                    // ,
-                    // baseline: 1,
-                    // minValue: 1,
-                    // maxValue: 50,
-                    // ticks: [5,10,15,20, 25, 30, 35, 40, 45, 50, 55, 60]
+                    minValue: type === 'rank' ? 1 : <any>new Date(0,0,0,0,0,0,0),
+                    ticks: type === 'rank' ? ticks : null
                 },
                 hAxis: {
                     title: 'Control'
@@ -196,7 +201,8 @@ export class AnalysisController {
                 height: 250,
                 animation: {
                     startup: false,
-                    duration: 0
+                    duration: 300,
+                    easing: 'inAndOut'
                 }
             },
 

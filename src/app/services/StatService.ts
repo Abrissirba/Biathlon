@@ -13,6 +13,6 @@ export class Stats extends ApiBaseService<IStat>{
     }
 
     getList(statQuery: IStatQuery): restangular.ICollectionPromise<IStat>{
-        return this.Service.getList<IStat>(statQuery);
+        return this.Service.withHttpConfig({cache: true}).getList<IStat>(statQuery);
     }
 }

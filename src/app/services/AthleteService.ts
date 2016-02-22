@@ -13,7 +13,7 @@ export class Athletes extends ApiBaseService<IAthlete>{
     }
     
     getList(firstName: string, lastName: string) : restangular.ICollectionPromise<IAthlete>{
-        return this.Service.getList<IAthlete>({
+        return this.Service.withHttpConfig({cache: true}).getList<IAthlete>({
             GivenName: firstName,
             FamilyName: lastName
         });

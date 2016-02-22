@@ -13,7 +13,7 @@ export class Cups extends ApiBaseService<ICup>{
     }
 
     getList(seasonId: string): restangular.ICollectionPromise<ICup>{
-        return this.Service.getList<ICup>({
+        return this.Service.withHttpConfig({cache: true}).getList<ICup>({
             SeasonId: seasonId
         });
     }

@@ -18,3 +18,4 @@ export * from './ITableQuery'
 export * from './IAnalyzeField';
 export * from './ICountry';
 export * from './IRelayTeamResult';
+export * from './IMenuItem';
