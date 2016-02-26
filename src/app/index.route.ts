@@ -19,18 +19,22 @@ export function routerConfig($stateProvider: angular.ui.IStateProvider, $urlRout
     })
     .state('app.results', {
         url: 'schedule/:seasonId/competitions/:eventId/results/:raceId',
-        template: temp('abrisResults')
+        template: temp('abrisResultsPage')
     })
     .state('app.cups', {
-        url: 'cups',
+        url: 'cups/:seasonId',
         template: temp('abrisCups')
+    })
+    .state('app.cupresults', {
+        url: 'cupresults/:seasonId/:cupId',
+        template: temp('abrisCupResults')
     })
     .state('app.athletes', {
         url: 'athletes',
         template: temp('abrisAthletes')
     })
     .state('app.stats', {
-        url: 'stats',
+        url: 'stats/:seasonId',
         template: temp('abrisStats')
     });
 

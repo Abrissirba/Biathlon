@@ -1,5 +1,6 @@
 import { NavbarController } from './navbar';
 
+/** @ngInject */
 export class NavbarState {
     private _items;
     private _navbarItemCallbacks = [];

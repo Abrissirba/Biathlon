@@ -16,3 +16,4 @@ export * from './StatCategoriesService';
 export * from './TableHelperService';
 export * from './ImageService';
 export * from './CountryService';
+export * from './MenuService';

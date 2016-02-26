@@ -48,7 +48,7 @@ html, body, md-content {
     background-color: #f5f5f5;
 }
 
-abris-events, abris-competitions, abris-results {
+abris-events, abris-competitions, abris-results, abris-home {
     display: block;
     height: 100%;
     md-content {
@@ -56,6 +56,12 @@ abris-events, abris-competitions, abris-results {
     }
 }
 
+abris-home {
+    img {
+        height: 100%;
+        width: 100%;
+    }
+}
 
 abris-app{
     display: block;

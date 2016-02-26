@@ -1,146 +1,110 @@
-<abris-topbar>
-    <abris-navbar-toggle></abris-navbar-toggle>
-    
-    <span ng-show="!resultsVm.searchMode">{{resultsVm.competition.ShortDescription}}</span>
-    
-    <span ng-show="resultsVm.searchMode" layout="row">
-        <md-icon class="material-icons">search</md-icon>
-        <md-input-container layout="row">
-            <input ng-model="resultsVm.searchString" abris-focus="resultsVm.searchFieldFocus">
-        </md-input-container>
-    </span>
-    
-    <div flex></div>
-    
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="resultsVm.searchMode = true; resultsVm.searchFieldFocus();" ng-if="!resultsVm.searchMode">
-        <md-icon class="material-icons">search</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="resultsVm.searchMode = false" ng-if="resultsVm.searchMode">
-        <md-icon class="material-icons">close</md-icon>
-    </md-button>
-    
-    <md-menu>
-        <md-button class="md-icon-button" aria-label="More" ng-click="$mdOpenMenu($event)">
-            <md-icon md-menu-origin class="material-icons">filter_list</md-icon>
-        </md-button>
-        <md-menu-content>
-            <md-menu-item ng-repeat="item in resultsVm.orderProps">
-                <md-button ng-click="resultsVm.onReorder(item.key)">
-                    {{item.title | translate}}
-                </md-button>
-            </md-menu-item>
-        </md-menu-content>
-    </md-menu>
-</abris-topbar>
-<md-content>
-    <md-card ng-if="!resultsVm.mobile">
-        <md-table-container>
-            <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
-                <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
-                <tr md-row>
-                    <th md-column md-numeric md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
-                    <th md-column md-order-by='Name' style="width: 50%"><span translate>NAME</span></th>
-                    <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
-                    <th md-column md-order-by='Shootings' style="width: 10%"><span translate>SHOOTING</span></th>
-                    <th md-column md-order-by='ShootingTotal' style="width: 5%"><span translate>TOTAL</span></th>
-                    <th md-column md-order-by='TotalTime' style="width: 10%"><span translate>TIME</span></th>
-                    <th md-column md-order-by='Behind' style="width: 5%"><span translate>BEHIND</span></th>
+<md-card ng-if="!resultsVm.smallDevice">
+    <md-table-container>
+        <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
+            <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
+            <tr md-row>
+                <th md-column md-numeric md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
+                <th md-column md-order-by='Name' style="width: 50%"><span translate>NAME</span></th>
+                <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
+                <th md-column md-order-by='Shootings' style="width: 10%"><span translate>SHOOTING</span></th>
+                <th md-column md-order-by='ShootingTotal' style="width: 5%"><span translate>TOTAL</span></th>
+                <th md-column md-order-by='TotalTime' style="width: 10%"><span translate>TIME</span></th>
+                <th md-column md-order-by='Behind' style="width: 5%"><span translate>BEHIND</span></th>
+            </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row ng-repeat='result in resultsVm.results track by $id(result)'  ng-click="resultsVm.openAnalysis(result)">
+                    <td md-cell><span ng-if="resultsVm._results || result.Leg === 0">{{::resultsVm.getRank(result)}}</span></td>
+                    <td md-cell>
+                        <img  ng-if="resultsVm._results || result.Leg !== 0" class="md-avatar" ng-src="{{::resultsVm.getAvatarUrl(result)}}"></img>
+                        {{::result.Name}}</td>
+                    <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
+                    <td md-cell>{{::result.Shootings}}</td>
+                    <td md-cell>{{::result.ShootingTotal}}</td>
+                    <td md-cell>{{::result.TotalTime}}</td>
+                    <td md-cell>{{::result.Behind}}</td>
                 </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row ng-repeat='result in resultsVm.results track by $id(result)'  ng-click="resultsVm.openAnalysis(result)">
-                        <td md-cell><span ng-if="resultsVm._results || result.Leg === 0">{{::resultsVm.getRank(result)}}</span></td>
-                        <td md-cell>
-                            <img  ng-if="resultsVm._results || result.Leg !== 0" class="md-avatar" ng-src="{{::resultsVm.getAvatarUrl(result)}}"></img>
-                            {{::result.Name}}</td>
-                        <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
-                        <td md-cell>{{::result.Shootings}}</td>
-                        <td md-cell>{{::result.ShootingTotal}}</td>
-                        <td md-cell>{{::result.TotalTime}}</td>
-                        <td md-cell>{{::result.Behind}}</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </md-table-container>
-    </md-card> 
-    
-    <md-card-list ng-if="resultsVm.mobile">
-        <md-virtual-repeat-container  ng-if="resultsVm._results">
-            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
-                <div layout="row" layout-align="center center">
-                    <div class="md-subhead">{{resultsVm.getRank(result)}}</div>
-                    <div class="no-padding"><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
-                    <div>{{result.Name}}</div>
-                    <div class="no-padding" flex layout="row" layout-align="end center">
-                        <abris-flag country-code="{{result.Nat}}"></abris-flag>
-                    </div>
-                </div>
-                <div layout="row" style="padding-top: 0">
-                    <div layout="column">
-                        <div class="md-caption">Shootings</div>
-                        <div class="">{{result.Shootings}}</div>
-                    </div>
-                    <div layout="column">
-                        <div class="md-caption">Total Time</div>
-                        <div class="">{{result.TotalTime}}</div>
-                    </div>
-                    <div layout="column">
-                        <div class="md-caption">Behind</div>
-                        <div class="">{{result.Behind}}</div>
-                    </div>
-                </div>
-            </md-card>
-        </md-virtual-repeat-container>
-        
-        <md-virtual-repeat-container ng-if="resultsVm._relayResults">
-            <md-card class="list-item" md-virtual-repeat="result in resultsVm.relayResults">
-                <div layout="row" layout-align="center center">
-                    <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
-                    <div>{{result.teamResult.Name}}</div>
-                    <div class="no-padding" flex layout="row" layout-align="end center">
-                        <abris-flag country-code="{{result.teamResult.Nat}}"></abris-flag>
-                    </div>
-                </div>
-                <div layout="row" style="padding-top: 0">
-                    <div layout="column">
-                        <div class="md-caption">Shootings</div>
-                        <div class="">{{result.teamResult.Shootings}}</div>
-                    </div>
-                    <div layout="column">
-                        <div class="md-caption">Total Time</div>
-                        <div class="">{{result.teamResult.TotalTime}}</div>
-                    </div>
-                    <div layout="column">
-                        <div class="md-caption">Behind</div>
-                        <div class="">{{result.teamResult.Behind}}</div>
-                    </div>
-                </div>
                 
-                <span class="individual-results">
-                    <div class="list-item" ng-repeat="result in result.individualResults">
-                        <div layout="row" layout-align="center center">
-                            <div class=""><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
-                            <div flex>{{result.Name}}</div>
+            </tbody>
+        </table>
+    </md-table-container>
+</md-card> 
+
+<md-card-list ng-if="resultsVm.smallDevice">
+    <md-virtual-repeat-container  ng-if="resultsVm._results">
+        <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
+            <div layout="row" layout-align="center center">
+                <div class="md-subhead">{{resultsVm.getRank(result)}}</div>
+                <div class="no-padding"><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
+                <div>{{result.Name}}</div>
+                <div class="no-padding" flex layout="row" layout-align="end center">
+                    <abris-flag country-code="{{result.Nat}}"></abris-flag>
+                </div>
+            </div>
+            <div layout="row" style="padding-top: 0">
+                <div layout="column">
+                    <div class="md-caption">Shootings</div>
+                    <div class="">{{result.Shootings}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Total Time</div>
+                    <div class="">{{result.TotalTime}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Behind</div>
+                    <div class="">{{result.Behind}}</div>
+                </div>
+            </div>
+        </md-card>
+    </md-virtual-repeat-container>
+    
+    <md-virtual-repeat-container ng-if="resultsVm._relayResults">
+        <md-card class="list-item" md-virtual-repeat="result in resultsVm.relayResults">
+            <div layout="row" layout-align="center center">
+                <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
+                <div>{{result.teamResult.Name}}</div>
+                <div class="no-padding" flex layout="row" layout-align="end center">
+                    <abris-flag country-code="{{result.teamResult.Nat}}"></abris-flag>
+                </div>
+            </div>
+            <div layout="row" style="padding-top: 0">
+                <div layout="column">
+                    <div class="md-caption">Shootings</div>
+                    <div class="">{{result.teamResult.Shootings}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Total Time</div>
+                    <div class="">{{result.teamResult.TotalTime}}</div>
+                </div>
+                <div layout="column">
+                    <div class="md-caption">Behind</div>
+                    <div class="">{{result.teamResult.Behind}}</div>
+                </div>
+            </div>
+            
+            <span class="individual-results">
+                <div class="list-item" ng-repeat="result in result.individualResults">
+                    <div layout="row" layout-align="center center">
+                        <div class=""><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
+                        <div flex>{{result.Name}}</div>
+                    </div>
+                    <div layout="row" style="padding-top: 0">
+                        <div layout="column">
+                            <div class="md-caption">Shootings</div>
+                            <div class="">{{result.Shootings}}</div>
                         </div>
-                        <div layout="row" style="padding-top: 0">
-                            <div layout="column">
-                                <div class="md-caption">Shootings</div>
-                                <div class="">{{result.Shootings}}</div>
-                            </div>
-                            <div layout="column">
-                                <div class="md-caption">Total Time</div>
-                                <div class="">{{result.TotalTime}}</div>
-                            </div>
-                            <div layout="column">
-                                <div class="md-caption">Behind</div>
-                                <div class="">{{result.Behind}}</div>
-                            </div>
+                        <div layout="column">
+                            <div class="md-caption">Total Time</div>
+                            <div class="">{{result.TotalTime}}</div>
+                        </div>
+                        <div layout="column">
+                            <div class="md-caption">Behind</div>
+                            <div class="">{{result.Behind}}</div>
                         </div>
                     </div>
-                </span>
+                </div>
+            </span>
 
-            </md-card>
-        </md-virtual-repeat-container>
-    </md-card-list>
-</md-content>
+        </md-card>
+    </md-virtual-repeat-container>
+</md-card-list>

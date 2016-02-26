@@ -8,6 +8,13 @@ export function abrisResults(): angular.IDirective {
 
   return {
     restrict: 'E',
+    scope: {
+        seasonId: '=?',
+        eventId: '=?',
+        raceId: '=?',
+        searchString: '=?',
+        staticSize: '=?'
+    },
     templateUrl: 'app/components/results.html',
     controller: ResultsController,
     controllerAs: 'resultsVm',
@@ -24,12 +31,11 @@ export class ResultsController extends TableBaseController<IResult> {
     relayResults: Array<IRelayResult>;
     _relayResults: Array<IRelayResult>;
     searchString: string;
-    mobile: string;
-    desktop: string;
+    smallDevice: boolean;
     seasonId: string;
     eventId: string;
     raceId: string;
-    competition: ICompetition;
+    staticSize: string;
     
     orderProps = [{
         title: 'RANK',
@@ -54,38 +60,15 @@ export class ResultsController extends TableBaseController<IResult> {
         private $mdDialog: any,
         private $element: any,
         private screenSize: any,
-        private $timeout: angular.ITimeoutService,
-        private NavbarState: NavbarState,
-        private Competitions: Competitions) {
+        private $timeout: angular.ITimeoutService) {
         
         super(TableHelperService, 'results', {order: 'Rank'});
         
         $scope.$watch('resultsVm.searchString', (val: string) => this.filter(val))
         
-        this.seasonId = this.$state.params['seasonId'];
-        this.eventId = this.$state.params['eventId'];
-        this.raceId = this.$state.params['raceId'];
-        
-        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
-            competitions.forEach((competition: ICompetition) => {
-                if (competition.RaceId === this.raceId) {
-                    this.competition = competition; 
-                }
-            });
-        });
-        
-        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
-            var items = [];
-            competitions.forEach((competition: ICompetition) => {
-                items.push({
-                   title: competition.ShortDescription,
-                   active: competition.RaceId === this.raceId,
-                   state: 'app.results({seasonId: "' + this.seasonId + '", eventId: "' + this.eventId + '", raceId: "' + competition.RaceId + '"})'
-                });
-            });
-            this.NavbarState.items = items;
-        });
-        
+        this.seasonId = this.seasonId || this.$state.params['seasonId'];
+        this.eventId = this.eventId || this.$state.params['eventId'];
+        this.raceId = this.raceId || this.$state.params['raceId'];
         
         this.promise = Results.getList(this.raceId).then((data) => {
             if (angular.isDefined(data[0].Leg) && data[0].Leg !== null) {
@@ -105,12 +88,15 @@ export class ResultsController extends TableBaseController<IResult> {
     }
     
     setSizeListeners() {
-        this.mobile = this.screenSize.on('xs, sm', (match) =>{
-            this.mobile = match;
-        });
-        this.desktop = this.screenSize.on('md, lg', (match) => {
-            this.desktop = match;
-        });
+        if(angular.isDefined(this.staticSize)) {
+            this.smallDevice = this.staticSize === 'lg' ? false : true;
+        }
+        else {
+            this.smallDevice = this.screenSize.is('xs, sm');
+            this.screenSize.on('xs, sm', (match) =>{
+                this.smallDevice = match;
+            });
+        }
     }
     
     setVerticalContainerHeight() {

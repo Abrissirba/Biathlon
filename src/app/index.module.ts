@@ -15,7 +15,10 @@ import { abrisAnalysis } from './components/analysis';
 import { abrisShootingBoard } from './components/shootingBoard';
 import { abrisFlag } from './components/flag';
 import { abrisLanguageSelector } from './components/languageSelector';
+import { abrisCups } from './components/cups';
+import { abrisCupResults } from './components/cupresults';
 import { abrisFocus } from './components/inputs/focus';
+import { abrisResultsPage } from './components/pages/resultsPage';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -37,6 +40,7 @@ import {
     TableHelperService, 
     Analysis,
     ImageService,
+    Menus,
     Countries} from './services/services';
 
 declare var moment: moment.MomentStatic;
@@ -77,6 +81,10 @@ module biathlon {
     .directive('abrisFlag', abrisFlag)
     .directive('abrisFocus', abrisFocus)
     .directive('abrisLanguageSelector', abrisLanguageSelector)
+    .directive('abrisCups', abrisCups)
+    .directive('abrisCupResults', abrisCupResults)
+    
+    .directive('abrisResultsPage', abrisResultsPage)
     
     .service('NavbarState', NavbarState)
     
@@ -97,5 +105,6 @@ module biathlon {
     .service('StatCategoriesService', StatCategoriesService)
     .service('TableHelperService', TableHelperService)
     .service('ImageService', ImageService)
+    .service('Menus', Menus)
     .service('Countries', Countries);
 }
