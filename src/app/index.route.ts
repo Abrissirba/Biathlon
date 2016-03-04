@@ -35,7 +35,11 @@ export function routerConfig($stateProvider: angular.ui.IStateProvider, $urlRout
     })
     .state('app.stats', {
         url: 'stats/:seasonId',
-        template: temp('abrisStats')
+        template: temp('abrisStatistics')
+    })
+    .state('app.shootingStats', {
+        url: 'stats/:seasonId',
+        template: temp('abrisStatistics')
     });
 
   $urlRouterProvider.otherwise('/');

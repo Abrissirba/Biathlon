@@ -4,7 +4,9 @@ import { ICup } from '../models/models'
 /** @ngInject */
 export class Cups extends ApiBaseService<ICup>{
     
-    constructor(Restangular: restangular.IService){
+    constructor(
+        Restangular: restangular.IService,
+        private $q: angular.IQService){
         super("cups", Restangular);
     }
     
@@ -16,5 +18,19 @@ export class Cups extends ApiBaseService<ICup>{
         return this.Service.withHttpConfig({cache: true}).getList<ICup>({
             SeasonId: seasonId
         });
+    }
+    
+    get(id: string, seasonId: string): angular.IPromise<ICup> {
+        var defer = this.$q.defer();
+        
+        this.getList(seasonId).then((cups: Array<ICup>) => {
+            cups.forEach((cup: ICup) => {
+                if(cup.CupId === id){
+                    defer.resolve(cup);
+                }
+            })
+        });
+        
+        return defer.promise;
     }
 }

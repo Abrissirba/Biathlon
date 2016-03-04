@@ -48,11 +48,12 @@ html, body, md-content {
     background-color: #f5f5f5;
 }
 
-abris-events, abris-competitions, abris-results, abris-home {
+abris-events, abris-competitions, abris-results, abris-home, abris-cups, abris-cup-results, abris-athletes {
     display: block;
     height: 100%;
     md-content {
-       height: calc(100% - 64px);
+       padding: 8px;
+       height: calc(100% - 80px);
     }
 }
 

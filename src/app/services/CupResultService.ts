@@ -9,6 +9,9 @@ export class CupResults extends ApiBaseService<ICupResult>{
     }
     
     transformResponse(data: any, response: any) : Array<any>{
+         data.Rows.forEach((result: any) => {
+            result.Rank = parseInt(<any>result.Rank);
+         });
         return data.Rows;
     }
 

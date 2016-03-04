@@ -9,7 +9,10 @@ export class NavbarState {
     private previousState = {
         'app.schedule': 'app.home',
         'app.competitions': 'app.schedule',
-        'app.results': 'app.competitions'
+        'app.results': 'app.competitions',
+        'app.cups': 'app.home',
+        'app.cupresults': 'app.cups',
+        'app.athletes': 'app.home'
     };
     
     constructor(

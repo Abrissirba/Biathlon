@@ -16,4 +16,5 @@ export class ApiBaseService <T>{
     isEntity(url, entity){
         return url.substring(url.indexOf('/api/') + 5) === entity;
     }
+
 }

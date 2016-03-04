@@ -1,4 +1,6 @@
-import { NavbarState } from './navbar/navbarState'
+import { NavbarState } from './navbar/navbarState';
+import { Seasons, Events } from '../services/services';
+import { ISeason, IEvent } from '../models/models';
 
 /** @ngInject */
 export function abrisHome(): angular.IDirective {
@@ -37,24 +39,36 @@ export class HomeController {
         eventId: 'BT1516SWRLCP08',
         raceId: 'BT1516SWRLCP08SWRL'
     }
+   prevEvent: IEvent;
+   currentEvent: IEvent;
+   nextEvent: IEvent;
     
-    currentSeason = '1516';
     
     constructor(
-        private NavbarState: NavbarState) {
+        private NavbarState: NavbarState,
+        private Seasons: Seasons,
+        private Events: Events) {
         
         this.NavbarState.items = [{
             title: "SCHEDULE_AND_RESULTS",
-            state: 'app.schedule({seasonId: ' + this.currentSeason + '})'
+            state: 'app.schedule({seasonId: ' + this.Seasons.currentSeason + '})'
         }, {
             title: "STANDINGS",
-            state: 'app.cups({seasonId: ' + this.currentSeason + '})'
+            state: 'app.cups({seasonId: ' + this.Seasons.currentSeason + '})'
         }, {
             title: "ATHLETES",
             state: 'app.athletes'
         }, {
             title: "STATISTICS",
-            state: 'app.stats({seasonId: ' + this.currentSeason + '})'
+            state: 'app.stats({seasonId: ' + this.Seasons.currentSeason + '})'
         }];
+    }
+    
+    getEvents() {
+       this.Events.getList(this.Seasons.currentSeason).then((events: Array<IEvent>) => {
+           this.prevEvent = this.Events.getPreviousEvent(events);
+           this.currentEvent = this.Events.getCurrentEvent(events);
+           this.nextEvent = this.Events.getPreviousEvent(events);
+       });
     }
 }

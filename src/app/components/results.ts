@@ -37,20 +37,6 @@ export class ResultsController extends TableBaseController<IResult> {
     raceId: string;
     staticSize: string;
     
-    orderProps = [{
-        title: 'RANK',
-        key: 'Rank'
-    }, {
-        title: 'NAME',
-        key: 'Name'
-    }, {
-        title: 'NATIONALITY',
-        key: 'Nat'
-    }, {
-        title: 'SHOOTINGS',
-        key: 'Shootings'
-    }];
-    
     constructor(
         TableHelperService: TableHelperService,
         private Results: Results,
@@ -64,7 +50,7 @@ export class ResultsController extends TableBaseController<IResult> {
         
         super(TableHelperService, 'results', {order: 'Rank'});
         
-        $scope.$watch('resultsVm.searchString', (val: string) => this.filter(val))
+        $scope.$watch('resultsVm.searchString', (val: string) => this.filter(val));
         
         this.seasonId = this.seasonId || this.$state.params['seasonId'];
         this.eventId = this.eventId || this.$state.params['eventId'];

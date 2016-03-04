@@ -44,7 +44,7 @@ export function abrisResultsPage(): angular.IDirective {
             </md-menu>
         </abris-topbar>
         <md-content>
-            <abris-results></abris-results>
+            <abris-results search-string="resultsPageVm.searchString"></abris-results>
         </md-content>
     `,
     controller: ResultsPageController,
@@ -60,7 +60,21 @@ export class ResultsPageController {
     eventId: string;
     raceId: string;
     competition: ICompetition;
+    searchString = "";
     
+    orderProps = [{
+        title: 'RANK',
+        key: 'Rank'
+    }, {
+        title: 'NAME',
+        key: 'Name'
+    }, {
+        title: 'NATIONALITY',
+        key: 'Nat'
+    }, {
+        title: 'SHOOTINGS',
+        key: 'Shootings'
+    }];
     
     constructor(
         private Results: Results,

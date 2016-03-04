@@ -6,7 +6,7 @@ export function abrisTopbar(): angular.IDirective {
   return {
     restrict: 'E',
     template: `
-        <md-toolbar>
+        <md-toolbar class="md-whiteframe-3dp">
             <div class='md-toolbar-tools'>
                 <div flex>
                     <ng-transclude class="topbar-tools" layout="row" layout-align="center center"></ng-transclude>

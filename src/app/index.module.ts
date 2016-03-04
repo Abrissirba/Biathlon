@@ -12,10 +12,14 @@ import { abrisEvents } from './components/events';
 import { abrisCompetitions } from './components/competitions';
 import { abrisResults } from './components/results';
 import { abrisAnalysis } from './components/analysis';
+import { abrisAthletes } from './components/athletes';
 import { abrisShootingBoard } from './components/shootingBoard';
+import { abrisAvatar } from './components/avatar';
+import { abrisInputSearch } from './components/inputSearch';
 import { abrisFlag } from './components/flag';
 import { abrisLanguageSelector } from './components/languageSelector';
 import { abrisCups } from './components/cups';
+import { abrisStatistics } from './components/statistics';
 import { abrisCupResults } from './components/cupresults';
 import { abrisFocus } from './components/inputs/focus';
 import { abrisResultsPage } from './components/pages/resultsPage';
@@ -78,11 +82,15 @@ module biathlon {
     .directive('abrisResults', abrisResults)
     .directive('abrisAnalysis', abrisAnalysis)
     .directive('abrisShootingBoard', abrisShootingBoard)
+    .directive('abrisAvatar', abrisAvatar)
+    .directive('abrisInputSearch', abrisInputSearch)
     .directive('abrisFlag', abrisFlag)
     .directive('abrisFocus', abrisFocus)
     .directive('abrisLanguageSelector', abrisLanguageSelector)
     .directive('abrisCups', abrisCups)
     .directive('abrisCupResults', abrisCupResults)
+    .directive('abrisStatistics', abrisStatistics)
+    .directive('abrisAthletes', abrisAthletes)
     
     .directive('abrisResultsPage', abrisResultsPage)
     
