@@ -47,6 +47,7 @@ export function abrisEvents(): angular.IDirective {
             <div layout="row" style="padding-top: 4px;">
                 <div>{{::event.Description}}</div>
             </div>
+            <div class="status" ng-class="{finished: eventsVm.hasFinished(event), 'not-finished': !eventsVm.hasFinished(event)}"></div>
         </md-card>
     </md-card-list>
     </md-content>
@@ -113,5 +114,9 @@ export class EventsController extends TableBaseController<IEvent> {
         this.desktop = this.screenSize.on('sm, md, lg', (match) => {
             this.desktop = match;
         });
+    }
+    
+    hasFinished(event: IEvent) {
+        return new Date(event.EndDate) < new Date();
     }
 }

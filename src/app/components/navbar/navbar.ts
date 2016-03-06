@@ -19,7 +19,7 @@ export function abrisNavbar(): angular.IDirective {
             </md-toolbar> -->
             
             <header>
-                <a class="md-button" ui-sref="app.home" layout="column" layout-align="center center">
+                <a class="md-button" ui-sref="app.home" ng-click="navbarVm.toggleNavbar()" layout="column" layout-align="center center">
                     <img src="http://v4m-cdn.juniper.it/x00001/public/B2FCFB5BAC8E400699AC169476649EDB/Vortex4/68C746AFCB334997A614B555CDAC9C35.jpg" />
                     <div class="md-headline">Biathlon Data</div>
                 </a>

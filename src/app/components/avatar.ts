@@ -8,7 +8,6 @@ export function abrisAvatar(): angular.IDirective {
     scope: {
         ibuid: '='
     },
-    replace: true,
     template: `
         <img class="md-avatar" ng-src="{{avatarVm.getAvatarUrl(result)}}"></img>
     `,

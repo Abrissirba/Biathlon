@@ -13,6 +13,12 @@ export class Stats extends ApiBaseService<IStat>{
     }
 
     getList(statQuery: IStatQuery): restangular.ICollectionPromise<IStat>{
+        statQuery.nat = statQuery.nat || '';
+        statQuery.ibuId = statQuery.ibuId || '';
+        statQuery.organizerId = statQuery.organizerId || '';
+        statQuery.seasonId = statQuery.seasonId || '';
+        statQuery.byWhat = statQuery.byWhat || 'ATH';
+        statQuery.genderId = statQuery.genderId || '';
         return this.Service.withHttpConfig({cache: true}).getList<IStat>(statQuery);
     }
 }

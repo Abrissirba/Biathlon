@@ -44,4 +44,38 @@ export class Menus {
         
         return defer.promise;
     }
+    
+    Stats(activeSeasonId: string) : angular.IPromise<any> {
+        var defer = this.$q.defer();
+        this.Seasons.getList().then((seasons: Array<ISeason>) => {
+            var items = [];
+            for(var i = 0; i < 20; i++){
+                items.push({
+                   title: seasons[i].Description,
+                   active: seasons[i].SeasonId === activeSeasonId,
+                   state: 'app.stats({seasonId: "' + seasons[i].SeasonId + '"})'
+                });
+            }
+            defer.resolve(items);
+        });
+        
+        return defer.promise;
+    }
+    
+    StatDetails(statisticId: string, activeSeasonId: string) : angular.IPromise<any> {
+        var defer = this.$q.defer();
+        this.Seasons.getList().then((seasons: Array<ISeason>) => {
+            var items = [];
+            for(var i = 0; i < 20; i++){
+                items.push({
+                   title: seasons[i].Description,
+                   active: seasons[i].SeasonId === activeSeasonId,
+                   state: 'app.statisticDefault({seasonId: "' + seasons[i].SeasonId + '", statisticId: "' + statisticId + '"})'
+                });
+            }
+            defer.resolve(items);
+        });
+        
+        return defer.promise;
+    }
 }

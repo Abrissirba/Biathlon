@@ -1,4 +1,4 @@
-import { ImageService } from '../services/services';
+import { ImageService } from '../../services/services';
 
 /** @ngInject */
 export function abrisInputSearch(): angular.IDirective {
@@ -9,7 +9,6 @@ export function abrisInputSearch(): angular.IDirective {
         searchText: '=ngModel',
         searchMode: '='
     },
-    replace: true,
     template: `
         <div class="input-search" flex layout="row" layout-align="start center">
             <md-button class="md-icon-button" ng-if="inputSearchVm.searchMode" ng-click="inputSearchVm.close()">
@@ -17,7 +16,7 @@ export function abrisInputSearch(): angular.IDirective {
             </md-button>
             
             <md-input-container md-no-float ng-show="inputSearchVm.searchMode" flex>
-                <input type="text" placeholder="SEARCH" ng-model="inputSearchVm.searchText" ng-model-options="{ debounce: 300 }" abris-focus="inputSearchVm.searchFieldFocus" />
+                <input type="text" placeholder="{{::'SEARCH' | translate}}" ng-model="inputSearchVm.searchText" ng-model-options="{ debounce: 300 }" abris-focus="inputSearchVm.searchFieldFocus" />
             </md-input-container>
             
             <md-button class="md-icon-button" ng-if="!inputSearchVm.searchMode" ng-click="inputSearchVm.open()">

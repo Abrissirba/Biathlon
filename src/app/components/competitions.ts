@@ -47,6 +47,7 @@ export function abrisCompetitions(): angular.IDirective {
                 <div layout="row">
                     <div class="md-subhead">{{::competition.ShortDescription}}</div>
                 </div>
+                <div class="status" ng-class="{finished: competitionsVm.hasFinished(competition), 'not-finished': !competitionsVm.hasFinished(competition)}"></div>
             </md-card>
         </md-card-list>
     </md-content>
@@ -116,5 +117,9 @@ export class CompetitionsController extends TableBaseController<ICompetition> {
         this.desktop = this.screenSize.on('sm, md, lg', (match) => {
             this.desktop = match;
         });
+    }
+    
+    hasFinished(competition: ICompetition) {
+        return competition.StatusText === "Final";
     }
 }

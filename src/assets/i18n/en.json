@@ -24,5 +24,16 @@
     "LAP": "Lap",
     "RANGE": "Range",
     "COURSE": "Course",
-    "SHOOTING_TIME": "Shooting time"
+    "SHOOTING_TIME": "Shooting time",
+    "START_ORDER": "Start pos",
+    "START_TIME": "Starting Time",
+    "AGE": "Age",
+    "ROLE": "Role",
+    "WEBSITE": "Website",
+    "HEIGHT": "Height",
+    "WEIGHT": "Weight",
+    "BIRTH_PLACE": "Birth Place",
+    "EDUCATION": "Education",
+    "YEARS": "Years",
+    "SEARCH": "Search"
 }

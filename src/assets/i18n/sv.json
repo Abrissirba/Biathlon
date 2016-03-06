@@ -24,5 +24,16 @@
     "LAP": "Varv",
     "RANGE": "Skyttevall",
     "COURSE": "Bana",
-    "SHOOTING_TIME": "Skyttetid"
+    "SHOOTING_TIME": "Skyttetid",
+    "START_ORDER": "Startpos",
+    "START_TIME": "Starttid",
+    "AGE": "Ålder",
+    "ROLE": "Roll",
+    "WEBSITE": "Hemsida",
+    "HEIGHT": "Längd",
+    "WEIGHT": "Vikt",
+    "BIRTH_PLACE": "Födelseort",
+    "EDUCATION": "Utbildning",
+    "YEARS": "År",
+    "SEARCH": "Sök"
 }

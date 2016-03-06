@@ -48,7 +48,7 @@ html, body, md-content {
     background-color: #f5f5f5;
 }
 
-abris-events, abris-competitions, abris-results, abris-home, abris-cups, abris-cup-results, abris-athletes {
+abris-events, abris-competitions, abris-results, abris-home, abris-cups, abris-cup-results, abris-athletes, abris-statistics, abris-statistic-default {
     display: block;
     height: 100%;
     md-content {
@@ -62,6 +62,9 @@ abris-home {
         height: 100%;
         width: 100%;
     }
+}
+.md-body-2 {
+    font-weight: 600;
 }
 
 abris-app{
@@ -77,15 +80,10 @@ abris-navbar {
 }
 
 table {
-    .md-avatar{
+    abris-avatar{
         margin-top: 8px;
         margin-bottom: 8px;
         margin-right: 16px;
-        border-radius: 50%;
-        box-sizing: content-box;
-        width: 40px;
-        height: 40px;
-        display: inline-block;
     }
     
     abris-flag {
@@ -102,38 +100,6 @@ table {
     }
 }
 
-md-card-list {
-    .list-item {
-        padding: 8px 2px 8px 2px;
-        
-        span {
-            padding: 8px;
-            .list-item {
-                padding: 4px 2px 4px 2px;
-            }
-        }
-        > div {
-            padding: 0;
-            > div {
-                padding: 0 8px 0 8px;
-            }
-        }
-        abris-flag {
-            > span {
-                font-size: 20px;
-                padding: 0;
-            }
-        }
-    }
-    
-    .md-avatar{
-        border-radius: 50%;
-        box-sizing: content-box;
-        width: 40px;
-        height: 40px;
-        display: inline-block;
-    }
-}
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject
  *  all your sass files automatically

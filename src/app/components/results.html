@@ -1,110 +1,132 @@
-<md-card ng-if="!resultsVm.smallDevice">
-    <md-table-container>
-        <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
-            <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
-                <tr md-row>
-                    <th md-column md-numeric md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
-                    <th md-column md-order-by='Name' style="width: 50%"><span translate>NAME</span></th>
-                    <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
-                    <th md-column md-order-by='Shootings' style="width: 10%"><span translate>SHOOTING</span></th>
-                    <th md-column md-order-by='ShootingTotal' style="width: 5%"><span translate>TOTAL</span></th>
-                    <th md-column md-order-by='TotalTime' style="width: 10%"><span translate>TIME</span></th>
-                    <th md-column md-order-by='Behind' style="width: 5%"><span translate>BEHIND</span></th>
-                </tr>
-            </thead>
-            <tbody md-body>
-                <tr md-row ng-repeat='result in resultsVm.results track by $id(result)'  ng-click="resultsVm.openAnalysis(result)">
-                    <td md-cell><span ng-if="resultsVm._results || result.Leg === 0">{{::resultsVm.getRank(result)}}</span></td>
-                    <td md-cell>
-                        <img  ng-if="resultsVm._results || result.Leg !== 0" class="md-avatar" ng-src="{{::resultsVm.getAvatarUrl(result)}}"></img>
-                        {{::result.Name}}</td>
-                    <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
-                    <td md-cell>{{::result.Shootings}}</td>
-                    <td md-cell>{{::result.ShootingTotal}}</td>
-                    <td md-cell>{{::result.TotalTime}}</td>
-                    <td md-cell>{{::result.Behind}}</td>
-                </tr>
-                
-            </tbody>
-        </table>
-    </md-table-container>
-</md-card> 
-
-<md-card-list ng-if="resultsVm.smallDevice">
-    <md-virtual-repeat-container  ng-if="resultsVm._results">
-        <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
-            <div layout="row" layout-align="center center">
-                <div class="md-subhead">{{resultsVm.getRank(result)}}</div>
-                <div class="no-padding"><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
-                <div>{{result.Name}}</div>
-                <div class="no-padding" flex layout="row" layout-align="end center">
-                    <abris-flag country-code="{{result.Nat}}"></abris-flag>
-                </div>
-            </div>
-            <div layout="row" style="padding-top: 0">
-                <div layout="column">
-                    <div class="md-caption">Shootings</div>
-                    <div class="">{{result.Shootings}}</div>
-                </div>
-                <div layout="column">
-                    <div class="md-caption">Total Time</div>
-                    <div class="">{{result.TotalTime}}</div>
-                </div>
-                <div layout="column">
-                    <div class="md-caption">Behind</div>
-                    <div class="">{{result.Behind}}</div>
-                </div>
-            </div>
-        </md-card>
-    </md-virtual-repeat-container>
+<abris-topbar>
+    <abris-navbar-toggle></abris-navbar-toggle>
     
-    <md-virtual-repeat-container ng-if="resultsVm._relayResults">
-        <md-card class="list-item" md-virtual-repeat="result in resultsVm.relayResults">
-            <div layout="row" layout-align="center center">
-                <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
-                <div>{{result.teamResult.Name}}</div>
-                <div class="no-padding" flex layout="row" layout-align="end center">
-                    <abris-flag country-code="{{result.teamResult.Nat}}"></abris-flag>
-                </div>
-            </div>
-            <div layout="row" style="padding-top: 0">
-                <div layout="column">
-                    <div class="md-caption">Shootings</div>
-                    <div class="">{{result.teamResult.Shootings}}</div>
-                </div>
-                <div layout="column">
-                    <div class="md-caption">Total Time</div>
-                    <div class="">{{result.teamResult.TotalTime}}</div>
-                </div>
-                <div layout="column">
-                    <div class="md-caption">Behind</div>
-                    <div class="">{{result.teamResult.Behind}}</div>
-                </div>
-            </div>
-            
-            <span class="individual-results">
-                <div class="list-item" ng-repeat="result in result.individualResults">
-                    <div layout="row" layout-align="center center">
-                        <div class=""><img class="md-avatar" ng-src="{{resultsVm.getAvatarUrl(result)}}"></img></div>
-                        <div flex>{{result.Name}}</div>
-                    </div>
-                    <div layout="row" style="padding-top: 0">
-                        <div layout="column">
-                            <div class="md-caption">Shootings</div>
-                            <div class="">{{result.Shootings}}</div>
-                        </div>
-                        <div layout="column">
-                            <div class="md-caption">Total Time</div>
-                            <div class="">{{result.TotalTime}}</div>
-                        </div>
-                        <div layout="column">
-                            <div class="md-caption">Behind</div>
-                            <div class="">{{result.Behind}}</div>
-                        </div>
-                    </div>
-                </div>
-            </span>
+    <span ng-if="!resultsVm.searchMode" flex>{{resultsVm.race.ShortDescription}}</span>
+    
+    <abris-input-search ng-model="resultsVm.searchText" ng-class="{flex: resultsVm.searchMode}" search-mode="resultsVm.searchMode"></abris-input-search>
+    
+    <abris-input-order on-reorder="resultsVm.onReorder" items="resultsVm.orderProps"></abris-input-order>
+</abris-topbar>
+<md-content>
+    <md-card ng-if="!resultsVm.smallDevice">
+        <md-table-container>
+            <table md-table md-row-select='false' ng-model='resultsVm.selected' md-progress='resultsVm.promise'>
+                <thead md-head md-order='resultsVm.query.order' md-on-reorder='resultsVm.onReorder'>
+                    <tr md-row>
+                        <th md-column md-numeric ng-if="resultsVm.race.StatusId === 11" md-order-by='Rank' style="width: 5%"><span translate>RANK</span></th>
+                        <th md-column md-numeric ng-if="resultsVm.race.StatusId === 3" md-order-by='StartOrder' style="width: 5%"><span translate>START_ORDER</span></th>
+                        <th md-column md-order-by='Name' style="width: 50%" ><span translate>NAME</span></th>
+                        <th md-column md-order-by='Nat' style="width: 10%"><span translate>NAT</span></th>
+                        <th md-column md-order-by='StartTime' style="width: 35%" ng-if="resultsVm.race.StatusId === 3"><span translate>START_TIME</span></th>
+                        <th md-column md-order-by='Shootings' style="width: 10%" ng-if="resultsVm.race.StatusId === 11"><span translate>SHOOTING</span></th>
+                        <th md-column md-order-by='ShootingTotal' style="width: 5%" ng-if="resultsVm.race.StatusId === 11"><span translate>TOTAL</span></th>
+                        <th md-column md-order-by='TotalTime' style="width: 10%" ng-if="resultsVm.race.StatusId === 11"><span translate>TIME</span></th>
+                        <th md-column md-order-by='Behind' style="width: 5%" ng-if="resultsVm.race.StatusId === 11"><span translate>BEHIND</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat='result in resultsVm.results track by $id(result)'  ng-click="resultsVm.openAnalysis(result)">
+                        <td md-cell ng-if="resultsVm.race.StatusId === 11"><span ng-if="(resultsVm._results || result.Leg === 0)">{{::resultsVm.getRank(result)}}</span></td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 3">{{::result.StartOrder}}</td>
+                        <td md-cell>
+                            <abris-avatar ng-if="resultsVm._results || result.Leg !== 0" ibuid="result.IBUId"></abris-avatar>
+                            {{::result.Name}}</td>
+                        <td md-cell><abris-flag country-code="{{::result.Nat}}"></abris-flag></td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 3">{{::result.StartTime | date : 'HH:mm:ss' : timezone}}</td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 11">{{::result.Shootings}}</td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 11">{{::result.ShootingTotal}}</td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 11">{{::result.TotalTime}}</td>
+                        <td md-cell ng-if="resultsVm.race.StatusId === 11">{{::result.Behind}}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </md-table-container>
+    </md-card> 
 
-        </md-card>
-    </md-virtual-repeat-container>
-</md-card-list>
+    <md-card-list ng-if="resultsVm.smallDevice">
+        <md-virtual-repeat-container  ng-if="resultsVm._results">
+            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
+                <div layout="row" layout-align="center center">
+                    <div class="md-subhead" ng-if="resultsVm.race.StatusId === 3">{{result.StartOrder}}</div>
+                    <div class="md-subhead" ng-if="resultsVm.race.StatusId === 11">{{resultsVm.getRank(result)}}</div>
+                    <abris-avatar class="no-padding" ibuid="result.IBUId"></abris-avatar>
+                    <div>{{result.Name}}</div>
+                    <div class="no-padding" flex layout="row" layout-align="end center">
+                        <abris-flag country-code="{{result.Nat}}"></abris-flag>
+                    </div>
+                </div>
+                <div layout="row" style="padding-top: 0" ng-if="resultsVm.race.StatusId === 3">
+                    <div layout="column">
+                        <div class="md-caption" translate>START_TIME</div>
+                        <div class="">{{result.StartTime | date : 'HH:mm:ss' : timezone}}</div>
+                    </div>
+                </div>
+                <div layout="row" style="padding-top: 0" ng-if="resultsVm.race.StatusId === 11">
+                    <div layout="column">
+                        <div class="md-caption" translate>SHOOTINGS</div>
+                        <div class="">{{result.Shootings}}</div>
+                    </div>
+                    <div layout="column">
+                        <div class="md-caption" translate>TOTAL_TIME</div>
+                        <div class="">{{result.TotalTime}}</div>
+                    </div>
+                    <div layout="column">
+                        <div class="md-caption" translate>BEHIND</div>
+                        <div class="">{{result.Behind}}</div>
+                    </div>
+                </div>
+            </md-card>
+        </md-virtual-repeat-container>
+        
+        <div ng-if="resultsVm._relayResults">
+            <md-card class="list-item" ng-repeat="result in resultsVm.relayResults track by $id(result)">
+                <div layout="row" layout-align="center center">
+                    <div class="md-subhead">{{resultsVm.getRank(result.teamResult)}}</div>
+                    <div>{{result.teamResult.Name}}</div>
+                    <div class="no-padding" flex layout="row" layout-align="end center">
+                        <abris-flag country-code="{{result.teamResult.Nat}}"></abris-flag>
+                    </div>
+                </div>
+                <div layout="row" style="padding-top: 0" ng-if="resultsVm.race.StatusId === 11">
+                    <div layout="column">
+                        <div class="md-caption">Shootings</div>
+                        <div class="">{{result.teamResult.Shootings}}</div>
+                    </div>
+                    <div layout="column">
+                        <div class="md-caption">Total Time</div>
+                        <div class="">{{result.teamResult.TotalTime}}</div>
+                    </div>
+                    <div layout="column">
+                        <div class="md-caption">Behind</div>
+                        <div class="">{{result.teamResult.Behind}}</div>
+                    </div>
+                </div>
+                
+                <span class="individual-results">
+                    <div class="list-item" ng-repeat="result in result.individualResults">
+                        <div layout="row" layout-align="center center">
+                            <abris-avatar ibuid="result.IBUId"></abris-avatar>
+                            <div flex>{{result.Name}}</div>
+                        </div>
+                        <div layout="row" style="padding-top: 0" ng-if="resultsVm.race.StatusId === 11">
+                            <div layout="column">
+                                <div class="md-caption">Shootings</div>
+                                <div class="">{{result.Shootings}}</div>
+                            </div>
+                            <div layout="column">
+                                <div class="md-caption">Total Time</div>
+                                <div class="">{{result.TotalTime}}</div>
+                            </div>
+                            <div layout="column">
+                                <div class="md-caption">Behind</div>
+                                <div class="">{{result.Behind}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+
+            </md-card>
+        </div>
+    </md-card-list>
+</md-content>

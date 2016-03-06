@@ -12,7 +12,7 @@ export function abrisResults(): angular.IDirective {
         seasonId: '=?',
         eventId: '=?',
         raceId: '=?',
-        searchString: '=?',
+        searchText: '=?',
         staticSize: '=?'
     },
     templateUrl: 'app/components/results.html',
@@ -30,17 +30,34 @@ export class ResultsController extends TableBaseController<IResult> {
     _results: Array<IResult>;
     relayResults: Array<IRelayResult>;
     _relayResults: Array<IRelayResult>;
-    searchString: string;
     smallDevice: boolean;
     seasonId: string;
     eventId: string;
+    race: ICompetition;
     raceId: string;
     staticSize: string;
+    searchText: string = '';
+    searchMode: boolean = false;
+    orderProps = [{
+        title: 'RANK',
+        key: 'Rank'
+    }, {
+        title: 'NAME',
+        key: 'Name'
+    }, {
+        title: 'NATIONALITY',
+        key: 'Nat'
+    }, {
+        title: 'SHOOTINGS',
+        key: 'Shootings'
+    }];
     
     constructor(
         TableHelperService: TableHelperService,
         private Results: Results,
+        private Competitions: Competitions,
         private $state: angular.ui.IStateService,
+        private NavbarState: NavbarState,
         private ImageService: ImageService,
         private $scope: angular.IScope,
         private $mdDialog: any,
@@ -50,7 +67,7 @@ export class ResultsController extends TableBaseController<IResult> {
         
         super(TableHelperService, 'results', {order: 'Rank'});
         
-        $scope.$watch('resultsVm.searchString', (val: string) => this.filter(val));
+        $scope.$watch('resultsVm.searchText', (val: string) => this.filter(val));
         
         this.seasonId = this.seasonId || this.$state.params['seasonId'];
         this.eventId = this.eventId || this.$state.params['eventId'];
@@ -65,8 +82,36 @@ export class ResultsController extends TableBaseController<IResult> {
                 this._results = data;
                 this.results = data;
             }
-            this.onReorder('Rank');
+            if (this.race.StatusId === 3) {
+                
+            }
+            var defaultSortOrder = this.race.StatusId === 3 ? "StartOrder" : 'Rank';
+            this.onReorder(defaultSortOrder);
             this.setVerticalContainerHeight();
+        });
+        
+        this.Competitions.get(this.eventId, this.raceId).then((race: ICompetition) => {
+            this.race = race;
+        });
+                
+        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
+            competitions.forEach((race: ICompetition) => {
+                if (race.RaceId === this.raceId) {
+                    this.race = race; 
+                }
+            });
+        });
+        
+        this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
+            var items = [];
+            competitions.forEach((competition: ICompetition) => {
+                items.push({
+                   title: competition.ShortDescription,
+                   active: competition.RaceId === this.raceId,
+                   state: 'app.results({seasonId: "' + this.seasonId + '", eventId: "' + this.eventId + '", raceId: "' + competition.RaceId + '"})'
+                });
+            });
+            this.NavbarState.items = items;
         });
         
         this.setSizeListeners();
@@ -103,12 +148,12 @@ export class ResultsController extends TableBaseController<IResult> {
         if(angular.isDefined(val)){
             val = val.toLowerCase();
             
-            if (this.results) {
+            if (this._results) {
                 this.results = this._results.filter((result: IResult) => {
                     return result.Nat.toLowerCase().indexOf(val) > -1 || result.Name.toLowerCase().indexOf(val) > -1;
                 }); 
             }
-            else {
+            else if(this._relayResults) {
                 this.relayResults = this._relayResults.filter((result: IRelayResult) => {
                     for (var i = 0; i < result.individualResults.length; i++) {
                         if (result.individualResults[i].Name.toLowerCase().indexOf(val) > -1) {
@@ -116,7 +161,7 @@ export class ResultsController extends TableBaseController<IResult> {
                         }
                     }
                     return result.teamResult.Nat.toLowerCase().indexOf(val) > -1 || result.teamResult.Name.toLowerCase().indexOf(val) > -1;
-                }); 
+                });
             }
             
         }

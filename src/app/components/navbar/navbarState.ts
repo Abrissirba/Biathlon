@@ -12,7 +12,9 @@ export class NavbarState {
         'app.results': 'app.competitions',
         'app.cups': 'app.home',
         'app.cupresults': 'app.cups',
-        'app.athletes': 'app.home'
+        'app.athletes': 'app.home',
+        'app.stats': 'app.home',
+        'app.statisticDefault': 'app.stats'
     };
     
     constructor(

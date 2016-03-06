@@ -24,5 +24,17 @@
     "LAP": "Rundenzeit",
     "RANGE": "Schießstand",
     "COURSE": "Laufzeit",
-    "SHOOTING_TIME": "Schießzeit"
+    "SHOOTING_TIME": "Schießzeit",
+    "START_ORDER": "Startnr",
+    "START_TIME": "Startzeit",
+    "AGE": "Alter",
+    "ROLE": "Funktion",
+    "WEBSITE": "Website",
+    "HEIGHT": "Größe",
+    "WEIGHT": "Gewicht",
+    "BIRTH_PLACE": "Geburtsort",
+    "EDUCATION": "Ausbildung",
+    "YEARS": "Jahre",
+    "SEARCH": "Suche",
+    "CURRENT_EVENT": "Aktuelle Veranstaltung"
 }

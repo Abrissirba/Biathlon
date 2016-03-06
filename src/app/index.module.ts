@@ -13,16 +13,19 @@ import { abrisCompetitions } from './components/competitions';
 import { abrisResults } from './components/results';
 import { abrisAnalysis } from './components/analysis';
 import { abrisAthletes } from './components/athletes';
+import { abrisAthlete } from './components/athlete';
 import { abrisShootingBoard } from './components/shootingBoard';
 import { abrisAvatar } from './components/avatar';
-import { abrisInputSearch } from './components/inputSearch';
+import { abrisInputSearch } from './components/inputs/inputSearch';
+import { abrisInputOrder } from './components/inputs/inputOrder';
 import { abrisFlag } from './components/flag';
 import { abrisLanguageSelector } from './components/languageSelector';
 import { abrisCups } from './components/cups';
 import { abrisStatistics } from './components/statistics';
+import { abrisStatisticDefault } from './components/StatisticDefault';
+import { abrisStatGraph } from './components/StatGraph';
 import { abrisCupResults } from './components/cupresults';
 import { abrisFocus } from './components/inputs/focus';
-import { abrisResultsPage } from './components/pages/resultsPage';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -84,15 +87,17 @@ module biathlon {
     .directive('abrisShootingBoard', abrisShootingBoard)
     .directive('abrisAvatar', abrisAvatar)
     .directive('abrisInputSearch', abrisInputSearch)
+    .directive('abrisInputOrder', abrisInputOrder)
     .directive('abrisFlag', abrisFlag)
     .directive('abrisFocus', abrisFocus)
     .directive('abrisLanguageSelector', abrisLanguageSelector)
     .directive('abrisCups', abrisCups)
     .directive('abrisCupResults', abrisCupResults)
     .directive('abrisStatistics', abrisStatistics)
+    .directive('abrisStatisticDefault', abrisStatisticDefault)
+    .directive('abrisStatGraph', abrisStatGraph)
     .directive('abrisAthletes', abrisAthletes)
-    
-    .directive('abrisResultsPage', abrisResultsPage)
+    .directive('abrisAthlete', abrisAthlete)
     
     .service('NavbarState', NavbarState)
     
