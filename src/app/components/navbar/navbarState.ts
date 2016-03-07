@@ -14,7 +14,8 @@ export class NavbarState {
         'app.cupresults': 'app.cups',
         'app.athletes': 'app.home',
         'app.stats': 'app.home',
-        'app.statisticDefault': 'app.stats'
+        'app.statisticDefault': 'app.stats',
+        'app.eventRankingResults': 'app.competitions'
     };
     
     constructor(

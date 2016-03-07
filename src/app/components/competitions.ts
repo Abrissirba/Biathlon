@@ -36,6 +36,16 @@ export function abrisCompetitions(): angular.IDirective {
                     </tbody>
                 </table>
             </md-table-container>
+            
+            <md-table-container>
+                <table md-table md-row-select='false'>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="eventRanking in competitionsVm.eventRankings track by $id(eventRanking)"  ui-sref="app.eventRankingResults({seasonId: competitionsVm.seasonId, eventId: competitionsVm.eventId, category: eventRanking.Category})">
+                        <td md-cell>{{::eventRanking.Title}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
         </md-card>
         
         <md-card-list ng-if="competitionsVm.mobile">
@@ -48,6 +58,11 @@ export function abrisCompetitions(): angular.IDirective {
                     <div class="md-subhead">{{::competition.ShortDescription}}</div>
                 </div>
                 <div class="status" ng-class="{finished: competitionsVm.hasFinished(competition), 'not-finished': !competitionsVm.hasFinished(competition)}"></div>
+            </md-card>
+            <md-card class="list-item" ng-repeat="eventRanking in competitionsVm.eventRankings track by $id(eventRanking)"  ui-sref="app.eventRankingResults({seasonId: competitionsVm.seasonId, eventId: competitionsVm.eventId, category: eventRanking.Category})">
+                <div layout="row">
+                    <div class="md-subhead">{{::eventRanking.Title | translate}}</div>
+                </div>
             </md-card>
         </md-card-list>
     </md-content>
@@ -69,6 +84,13 @@ export class CompetitionsController extends TableBaseController<ICompetition> {
     mobile: string;
     desktop: string;
     
+    eventRankings = [{
+        Title: 'WOMENS_EVENT_RANKING',
+        Category: 'women'
+    },{
+        Title: 'MEN_EVENT_RANKING',
+        Category: 'men'
+    }]
     
     constructor(
         TableHelperService: TableHelperService,

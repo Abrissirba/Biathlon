@@ -6,7 +6,8 @@ import { IEvent } from '../models/models'
 export class Events extends ApiBaseService<IEvent>{
     
     constructor(Restangular: restangular.IService,
-        private Seasons: Seasons){
+        private Seasons: Seasons,
+        private $q: angular.IQService){
         super("events", Restangular);
     }
     
@@ -19,6 +20,20 @@ export class Events extends ApiBaseService<IEvent>{
             SeasonId: seasonId,
             level: 1
         });
+    }
+    
+    get(eventId: string, seasonId: string) : angular.IPromise<IEvent> {
+        var defer = this.$q.defer();
+        
+        this.getList(seasonId).then((events: Array<IEvent>) => {
+            events.forEach((event: IEvent) => {
+                if(event.EventId === eventId){
+                    defer.resolve(event);
+                }
+            });
+        });
+        
+        return defer.promise;
     }
     
     getPreviousEvent(events: Array<IEvent>): IEvent {

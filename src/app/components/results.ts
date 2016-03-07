@@ -73,25 +73,27 @@ export class ResultsController extends TableBaseController<IResult> {
         this.eventId = this.eventId || this.$state.params['eventId'];
         this.raceId = this.raceId || this.$state.params['raceId'];
         
-        this.promise = Results.getList(this.raceId).then((data) => {
-            if (angular.isDefined(data[0].Leg) && data[0].Leg !== null) {
-                this._relayResults = Results.parseRelayData(data);
-                this.relayResults = this._relayResults;
-            }
-            else {
-                this._results = data;
-                this.results = data;
-            }
-            if (this.race.StatusId === 3) {
-                
-            }
-            var defaultSortOrder = this.race.StatusId === 3 ? "StartOrder" : 'Rank';
-            this.onReorder(defaultSortOrder);
-            this.setVerticalContainerHeight();
-        });
+
         
-        this.Competitions.get(this.eventId, this.raceId).then((race: ICompetition) => {
+        this.promise = this.Competitions.get(this.eventId, this.raceId).then((race: ICompetition) => {
             this.race = race;
+            
+            this.promise = Results.getList(this.raceId).then((data) => {
+                if (angular.isDefined(data[0].Leg) && data[0].Leg !== null) {
+                    this._relayResults = Results.parseRelayData(data);
+                    this.relayResults = this._relayResults;
+                }
+                else {
+                    this._results = data;
+                    this.results = data;
+                }
+                if (this.race.StatusId === 3) {
+                    
+                }
+                var defaultSortOrder = this.race.StatusId === 3 ? "StartOrder" : 'Rank';
+                this.onReorder(defaultSortOrder);
+                this.setVerticalContainerHeight();
+            });
         });
                 
         this.Competitions.getList(this.eventId).then((competitions: Array<ICompetition>) => {
@@ -174,7 +176,7 @@ export class ResultsController extends TableBaseController<IResult> {
     }
     
     getRank(result: IResult){
-        if(result.Rank < 990){
+        if(<any>result.Rank < 990){
             return result.Rank.toString();
         }
         else if(result.IRM){

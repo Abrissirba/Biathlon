@@ -35,5 +35,14 @@
     "BIRTH_PLACE": "Birth Place",
     "EDUCATION": "Education",
     "YEARS": "Years",
-    "SEARCH": "Search"
+    "SEARCH": "Search",
+    "VALUE": "Value",
+    "DETAILS": "Details",
+    "CURRENT_EVENT": "Current Event",
+    "NEXT_RACE": "Next Race",
+    "WOMEN_EVENT_RANKING": "Women Event Ranking",
+    "MEN_EVENT_RANKING": "Men Event Ranking",
+    "SCORE": "Score",
+    "RACE_POSITIONS": "Race Postitions",
+    "WORLD_CUP_RANK": "World Cup Rank"
 }

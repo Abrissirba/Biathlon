@@ -17,7 +17,7 @@ import { abrisAthlete } from './components/athlete';
 import { abrisShootingBoard } from './components/shootingBoard';
 import { abrisAvatar } from './components/avatar';
 import { abrisInputSearch } from './components/inputs/inputSearch';
-import { abrisInputOrder } from './components/inputs/inputOrder';
+import { abrisInputFilter } from './components/inputs/inputOrder';
 import { abrisFlag } from './components/flag';
 import { abrisLanguageSelector } from './components/languageSelector';
 import { abrisCups } from './components/cups';
@@ -26,6 +26,7 @@ import { abrisStatisticDefault } from './components/StatisticDefault';
 import { abrisStatGraph } from './components/StatGraph';
 import { abrisCupResults } from './components/cupresults';
 import { abrisFocus } from './components/inputs/focus';
+import { abrisEventRankingResults } from './components/EventRankingResults';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -48,7 +49,8 @@ import {
     Analysis,
     ImageService,
     Menus,
-    Countries} from './services/services';
+    Countries,
+    Rankings} from './services/services';
 
 declare var moment: moment.MomentStatic;
 
@@ -87,7 +89,7 @@ module biathlon {
     .directive('abrisShootingBoard', abrisShootingBoard)
     .directive('abrisAvatar', abrisAvatar)
     .directive('abrisInputSearch', abrisInputSearch)
-    .directive('abrisInputOrder', abrisInputOrder)
+    .directive('abrisInputFilter', abrisInputFilter)
     .directive('abrisFlag', abrisFlag)
     .directive('abrisFocus', abrisFocus)
     .directive('abrisLanguageSelector', abrisLanguageSelector)
@@ -98,6 +100,7 @@ module biathlon {
     .directive('abrisStatGraph', abrisStatGraph)
     .directive('abrisAthletes', abrisAthletes)
     .directive('abrisAthlete', abrisAthlete)
+    .directive('abrisEventRankingResults', abrisEventRankingResults)
     
     .service('NavbarState', NavbarState)
     
@@ -119,5 +122,6 @@ module biathlon {
     .service('TableHelperService', TableHelperService)
     .service('ImageService', ImageService)
     .service('Menus', Menus)
-    .service('Countries', Countries);
+    .service('Countries', Countries)
+    .service('Rankings', Rankings);
 }

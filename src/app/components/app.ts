@@ -28,11 +28,16 @@ export class AppController {
     
     constructor(
         private $state: angular.ui.IStateService,
-        private screenSize: any
+        private screenSize: any,
+        private $window: any,
+        private $rootScope: angular.IRootScopeService,
+        private $location: angular.ILocationService
     ) {
         if (this.$state.current.name === 'app') {
            this.$state.go('app.home'); 
         }
+        
+        this.setUpGoogleAnalytics();
     }
     
     setSizeListeners() {
@@ -47,6 +52,14 @@ export class AppController {
         });
         this.lg = this.screenSize.on('lg', (match) => {
             this.lg = match;
+        });
+    }
+    
+    setUpGoogleAnalytics() {
+        this.$window.ga('create', 'UA-74792295-1', 'auto');
+        
+        this.$rootScope.$on('$stateChangeSuccess', (event) => {
+            this.$window.ga('send', 'pageview', this.$location.path());
         });
     }
 }

@@ -5,7 +5,7 @@
     
     <abris-input-search ng-model="resultsVm.searchText" ng-class="{flex: resultsVm.searchMode}" search-mode="resultsVm.searchMode"></abris-input-search>
     
-    <abris-input-order on-reorder="resultsVm.onReorder" items="resultsVm.orderProps"></abris-input-order>
+    <abris-input-filter on-reorder="resultsVm.onReorder" order-items="resultsVm.orderProps"></abris-input-filter>
 </abris-topbar>
 <md-content>
     <md-card ng-if="!resultsVm.smallDevice">

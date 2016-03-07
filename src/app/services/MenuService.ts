@@ -78,4 +78,22 @@ export class Menus {
         
         return defer.promise;
     }
+    
+    EventResults(seasonId: string, eventId: string, activeCategory: string) : angular.IPromise<any> {
+        var defer = this.$q.defer();
+        var items = [];
+        items.push({
+            title: 'WOMEN_EVENT_RANKING',
+            active: activeCategory === 'women',
+            state: 'app.eventRankingResults({seasonId: "' + seasonId + '", eventId: "' + eventId + '", category: "women"})'
+        }, {
+            title: 'MEN_EVENT_RANKING',
+            active: activeCategory === 'men',
+            state: 'app.eventRankingResults({seasonId: "' + seasonId + '", eventId: "' + eventId + '", category: "men"})'
+        });
+        
+        defer.resolve(items);
+        
+        return defer.promise;
+    }
 }

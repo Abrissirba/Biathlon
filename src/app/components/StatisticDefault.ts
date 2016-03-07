@@ -20,14 +20,12 @@ export function abrisStatisticDefault(): angular.IDirective {
         
         <abris-input-search ng-model="statisticDefaultVm.searchText" ng-class="{flex: statisticDefaultVm.searchMode}" search-mode="statisticDefaultVm.searchMode"></abris-input-search>
         
-        <abris-input-order on-reorder="statisticDefaultVm.onReorder" items="statisticDefaultVm.orderProps"></abris-input-order>
+        <abris-input-filter on-reorder="statisticDefaultVm.onReorder" order-items="statisticDefaultVm.orderProps"></abris-input-filter>
     </abris-topbar>
     
     
     <md-content>
-    
-    <abris-stat-graph statistic-id="'SHOOT_W_A'" ibuid="'BTSWE22803199001'"></abris-stat-graph>
-    
+
     <md-card ng-if="!statisticDefaultVm.mobile">
         <md-table-container>
             <table md-table md-row-select='false' ng-model='statisticDefaultVm.selected' md-progress='statisticDefaultVm.promise'>
@@ -41,7 +39,7 @@ export function abrisStatisticDefault(): angular.IDirective {
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row ng-repeat='stat in statisticDefaultVm.stats track by $id(stat)'>
+                    <tr md-row ng-repeat='stat in statisticDefaultVm.stats track by $id(stat)' ng-click="statisticDefaultVm.openGraph(stat)">
                         <td md-cell>
                             {{::stat.SortOrder}}
                         </md-cell>
@@ -65,7 +63,7 @@ export function abrisStatisticDefault(): angular.IDirective {
     </md-card>
     <md-card-list ng-if="statisticDefaultVm.mobile">
         <md-virtual-repeat-container>
-            <md-card class="list-item" md-virtual-repeat="stat in statisticDefaultVm.stats">
+            <md-card class="list-item" md-virtual-repeat="stat in statisticDefaultVm.stats" ng-click="statisticDefaultVm.openGraph(stat)">
                 <div layout="row" layout-align="center center">
                     <div>{{stat.SortOrder}}</div>
                     <abris-avatar ibuid="stat.IBUId"></abris-avatar>
@@ -130,7 +128,8 @@ export class StatisticDefaultController extends TableBaseController<IStat> {
         private screenSize: any,
         private $scope: angular.IScope,
         private $timeout: angular.ITimeoutService,
-        private $element: any) {
+        private $element: any,
+        private $mdDialog: angular.material.IDialogService) {
         
         super(TableHelperService, 'stats');
         
@@ -190,6 +189,18 @@ export class StatisticDefaultController extends TableBaseController<IStat> {
                 console.log(element);
             }
             this.$scope.$broadcast('$md-resize');
+        });
+    }
+    
+    openGraph(stat: IStat) {
+        (<any>this.$mdDialog).showAbrisComponentDialog({
+            componentName: 'abrisStatGraph',
+            title: stat.Name,
+            params: {
+                statisticId: this.statItem.StatisticId,
+                ibuid: stat.IBUId
+            },
+            fullscreen: true
         });
     }
 }
