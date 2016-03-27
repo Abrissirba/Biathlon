@@ -64,7 +64,7 @@ export class Rankings {
         
         this.Competitions.getList(eventId).then((races: Array<ICompetition>) => {
             races.forEach((race: ICompetition) => {
-                if (race.catId === raceCatId) {
+                if (race.catId === raceCatId && race.DisciplineId !== 'RL') {
                     promises.push(this.Results.getList(race.RaceId));
                 }
             });
@@ -73,24 +73,24 @@ export class Rankings {
                 allResults.forEach((results: Array<IResult>) => {
                     results.forEach((result: IResult) => {
                         var rank = parseInt(result.Rank);
-                        if (rank <= 40) {
+                        //if (rank <= 40) {
                             var ranking = rankings.filter((existingResults: IEventResult) => {
                                 return result.IBUId === existingResults.IBUId;
                             })[0];
                             if (ranking) {
-                                ranking.Score += this.Points[rank - 1];
+                                ranking.Score += this.Points[rank - 1] || 0;
                                 ranking.RacePositions.push(rank);
                             }
                             else {
                                 rankings.push(<any>{
                                     IBUId: result.IBUId,
-                                    Score: this.Points[rank - 1],
+                                    Score: this.Points[rank - 1] || 0,
                                     Name: result.Name,
                                     Nat: result.Nat,
                                     RacePositions: [rank]
                                 });
                             }
-                        }
+                        //}
                     });
                 });
                 rankings = rankings.sort((a: IEventResult, b: IEventResult) => {
@@ -99,6 +99,24 @@ export class Rankings {
                     }
                     if (a.Score < b.Score) {
                         return 1;
+                    }
+                    if(a.Score === b.Score) {
+                        var accA = 0, accB = 0;
+                        a.RacePositions.forEach((pos) => {
+                            accA += pos;
+                        });
+                        b.RacePositions.forEach((pos) => {
+                            accB += pos;
+                        });
+                        accA = accA / a.RacePositions.length;
+                        accB = accB / b.RacePositions.length;
+                        
+                        if (accA < accB) {
+                            return -1;
+                        }
+                        if (accA > accB) {
+                            return 1;
+                        }
                     }
                     return 0;
                 });

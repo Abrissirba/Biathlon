@@ -21,7 +21,7 @@
     "angular-material-data-table": "~0.9.9",
     "angular-google-chart": "~0.1.0",
     "flag-icon-css": "*",
-    "md-component-dialog": "~0.0.5",
+    "md-component-dialog": "*",
     "angular-media-queries": "^0.6.0",
     "angular-ui-router-anim-in-out": "^1.0.2"
   },

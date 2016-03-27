@@ -29,7 +29,9 @@ export function runBlock(
     Results,
     Seasons,
     StatItems,
-    Stats) {
+    Stats,
+    $translate: any
+    ) {
     
     Restangular.setBaseUrl('http://datacenter.biathlonresults.com/modules/sportapi/api/');
     Restangular.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK', RT: 385698, RequestId: 1});
@@ -92,5 +94,8 @@ export function runBlock(
         return extractedData;
     });
     
-    $log.debug('runBlock end');
+    var langKey = localStorage.getItem('langKey');
+    if (langKey) {
+        $translate.use(langKey);
+    }
 }

@@ -32,8 +32,8 @@ export function abrisAnalysis(): angular.IDirective {
                 </div>
 
     
-                <div layout="column" ng-repeat="lap in analysisVm.lapAnalyze" layout-align="center center">
-                    <div class="md-subhead">Lap {{$index + 1}}</div>
+                <div layout="column" ng-repeat="lap in analysisVm.lapAnalyze" layout-align="start center">
+                    <div class="md-subhead">{{::analysisVm.getLapTitle($index + 1)}}</div>
                     <md-card>
                         <div layout="row">
                             <div layout="column" class="column"  layout-align="end end" hide-gt-sm>
@@ -68,7 +68,7 @@ export function abrisAnalysis(): angular.IDirective {
                                 <div>{{::lap.ShootingTime.Rank|| '&nbsp;'}}</div>  
                             </div>
                         </div>
-                        <div layout="row" layout-align="center center">
+                        <div layout="row" layout-align="center center" ng-if="lap.Shooting && $index !== analysisVm.lapAnalyze.length - 1">
                             <abris-shooting-board value="lap.Shooting.Value"></abris-shooting-board>
                         </div>
                         
@@ -144,6 +144,15 @@ export class AnalysisController {
     
     selectDiagram(diagramType: string) {
         this.initProgressionsDiagram(this.progressionAnalyze, diagramType);
+    }
+    
+    getLapTitle(index: number) {
+        if(index < this.lapAnalyze.length) {
+            return 'LAP ' + index;
+        }
+        if(index <= this.lapAnalyze.length) {
+            return 'TOTAL';
+        }
     }
     
     initProgressionsDiagram(fields: Array<IAnalyzeField>, type: string){

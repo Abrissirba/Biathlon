@@ -46,7 +46,7 @@
 
     <md-card-list ng-if="resultsVm.smallDevice">
         <md-virtual-repeat-container  ng-if="resultsVm._results">
-            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" ng-click="resultsVm.openAnalysis(result)"  >
+            <md-card class="list-item" md-virtual-repeat="result in resultsVm.results" md-item-size="96" ng-click="resultsVm.openAnalysis(result)"  >
                 <div layout="row" layout-align="center center">
                     <div class="md-subhead" ng-if="resultsVm.race.StatusId === 3">{{result.StartOrder}}</div>
                     <div class="md-subhead" ng-if="resultsVm.race.StatusId === 11">{{resultsVm.getRank(result)}}</div>

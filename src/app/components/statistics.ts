@@ -27,7 +27,7 @@ export function abrisStatistics(): angular.IDirective {
                     </thead>
                     <tbody md-body>
                         <tr md-row ng-repeat='statItem in statisticsVm.itemsForSelectedCategory() track by statItem.StatisticId' ui-sref="app.statisticDefault({seasonId: statisticsVm.seasonId, statisticId: statItem.StatisticId})">
-                            <td md-cell>{{::statItem.ShortDescription}}</td>
+                            <td md-cell>{{statItem.ShortDescription | translate}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -37,7 +37,7 @@ export function abrisStatistics(): angular.IDirective {
         <md-card-list ng-if="statisticsVm.mobile">
             <md-card class="list-item" ng-repeat="statItem in statisticsVm.itemsForSelectedCategory() track by statItem.StatisticId"  ui-sref="app.statisticDefault({seasonId: statisticsVm.seasonId, statisticId: statItem.StatisticId})">
                 <div layout="row" layout-align="center center">
-                    <div  flex>{{::statItem.ShortDescription}}</div>
+                    <div  flex>{{statItem.ShortDescription | translate}}</div>
                 </div>
             </md-card>
         </md-card-list>

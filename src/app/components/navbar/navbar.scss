@@ -104,10 +104,6 @@ abris-navbar {
 
 abris-topbar {
     display: block;
-    md-toolbar:not(.md-menu-toolbar) {
-        background: $background-color;
-        color: #fff;
-    }
     
     .md-toolbar-tools {
         padding: 0 0 0 16px;
@@ -121,4 +117,9 @@ abris-topbar {
     .md-toolbar-tools abris-navbar-toggle .md-button {
         margin-left: -16px;
     }
+}
+
+md-toolbar:not(.md-menu-toolbar) {
+    background: $background-color;
+    color: #fff;
 }

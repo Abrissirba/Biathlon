@@ -62,7 +62,7 @@ export function abrisCupResults(): angular.IDirective {
                         <tr md-row ng-repeat='cupResult in cupResultsVm.cupResults track by $id(cupResult)'  ng-click="cupResultsVm.openAnalysis(result)">
                             <td md-cell><span>{{::cupResult.Rank}}</span></td>
                             <td md-cell>
-                                <img ng-if="cupResult.IBUId.length !== 3" class="md-avatar" ng-src="{{::cupResultsVm.getAvatarUrl(cupResult)}}"></img>
+                                <abris-avatar ng-if="cupResult.IBUId.length !== 3" ibuid="cupResult.IBUId"></abris-avatar>
                                 {{::cupResult.Name}}</td>
                             <td md-cell><abris-flag country-code="{{::cupResult.Nat}}"></abris-flag></td>
                             <td md-cell>{{::cupResult.Score}}</td>
@@ -75,10 +75,12 @@ export function abrisCupResults(): angular.IDirective {
         
         <md-card-list ng-if="cupResultsVm.mobile">
             <md-virtual-repeat-container>
-                <md-card class="list-item" md-virtual-repeat="cupResult in cupResultsVm.cupResults">
+                <md-card class="list-item" md-virtual-repeat="cupResult in cupResultsVm.cupResults" md-item-size="64">
                     <div layout="row" layout-align="center center">
                         <div class="md-subhead">{{cupResult.Rank}}</div>
-                        <div class="no-padding" ng-if="cupResult.IBUId.length !== 3"><img class="md-avatar" ng-src="{{cupResultsVm.getAvatarUrl(cupResult)}}"></img></div>
+                        <div class="no-padding" ng-if="cupResult.IBUId.length !== 3">
+                            <abris-avatar ibuid="cupResult.IBUId"></abris-avatar>
+                        </div>
                         <div flex>{{cupResult.Name}}</div>
                         <div>{{cupResult.Score}}</div>
                         <div class="no-padding" layout="row" layout-align="end center">
@@ -155,21 +157,7 @@ export class CupResultsController extends TableBaseController<ICupResult> {
         });
         
         this.setSizeListeners();
-        this.setVerticalContainerHeight();
-    }
-    
-    setVerticalContainerHeight() {
-        this.$timeout(() => {
-            var elements = this.$element.find('md-virtual-repeat-container');
-            for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                var height = window.innerHeight - element.offsetTop;
-
-                element.style.height = height + 'px';
-                console.log(element);
-            }
-            this.$scope.$broadcast('$md-resize');
-        });
+        this.setVerticalContainerHeight(this.$timeout, this.$element, this.$scope);
     }
     
     setSizeListeners() {

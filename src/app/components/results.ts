@@ -92,7 +92,7 @@ export class ResultsController extends TableBaseController<IResult> {
                 }
                 var defaultSortOrder = this.race.StatusId === 3 ? "StartOrder" : 'Rank';
                 this.onReorder(defaultSortOrder);
-                this.setVerticalContainerHeight();
+                this.setVerticalContainerHeight(this.$timeout, this.$element, this.$scope);
             });
         });
                 
@@ -132,19 +132,7 @@ export class ResultsController extends TableBaseController<IResult> {
         }
     }
     
-    setVerticalContainerHeight() {
-        this.$timeout(() => {
-            var elements = this.$element.find('md-virtual-repeat-container');
-            for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                var height = window.innerHeight - element.offsetTop;
 
-                element.style.height = height + 'px';
-                console.log(element);
-            }
-            this.$scope.$broadcast('$md-resize');
-        });
-    }
     
     filter(val: string){
         if(angular.isDefined(val)){

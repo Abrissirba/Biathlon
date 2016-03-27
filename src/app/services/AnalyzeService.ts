@@ -87,8 +87,11 @@ export class Analysis extends ApiBaseService<IAnalyzeField>{
         var length = fields.length;
         var laps = 0;
         for (var i = 0; i < length; i++) {
-            if(fields[i].FieldId.indexOf("A0" + (laps + 1)) > -1){
-                ++laps;
+            if(fields[i].FieldId.indexOf("A0") > -1){
+                var lapNr = parseInt(fields[i].FieldId[2]);
+                if(lapNr && lapNr > laps) {
+                    laps = lapNr;
+                }
             }
         }
         

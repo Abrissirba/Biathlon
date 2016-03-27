@@ -41,7 +41,7 @@ export function abrisEventRankingResults(): angular.IDirective {
                             <td md-cell>{{::ranking.Score}}</td>
                             <td md-cell>
                                 <span ng-repeat="racePos in ranking.RacePositions track by $index">
-                                    {{::racePos}}
+                                    {{::racePos}},
                                 </span>
                             </td>
                             <td md-cell>{{::ranking.WorldCupRank}}</td>
@@ -53,31 +53,33 @@ export function abrisEventRankingResults(): angular.IDirective {
     </md-card>
     
     <md-card-list ng-if="eventRankingResultsVm.smallDevice">
-        <md-card class="list-item" ng-repeat="ranking in eventRankingResultsVm.rankings track by ranking.IBUId">
-            <div layout="row" layout-align="center center">
-                <div class="md-subhead">{{ranking.Rank}}</div>
-                <div class="no-padding" ng-if="ranking.IBUId.length !== 3"><abris-avatar ibuid="ranking.IBUId"></abris-avatar></div>
-                <div flex>{{ranking.Name}}</div>
-                <div>{{ranking.Score}}</div>
-                <div class="no-padding" layout="row" layout-align="end center">
-                    <abris-flag country-code="{{ranking.Nat}}"></abris-flag>
+        <md-virtual-repeat-container>
+            <md-card class="list-item" md-virtual-repeat="ranking in eventRankingResultsVm.rankings" md-item-size="102">
+                <div layout="row" layout-align="center center">
+                    <div class="md-subhead">{{ranking.Rank}}</div>
+                    <div class="no-padding" ng-if="ranking.IBUId.length !== 3"><abris-avatar ibuid="ranking.IBUId"></abris-avatar></div>
+                    <div flex>{{ranking.Name}}</div>
+                    <div>{{ranking.Score}}</div>
+                    <div class="no-padding" layout="row" layout-align="end center">
+                        <abris-flag country-code="{{ranking.Nat}}"></abris-flag>
+                    </div>
                 </div>
-            </div>
-            <div layout="row" style="padding-top: 0">
-                    <div layout="column">
-                        <div class="md-caption" translate>RACE_POSITIONS</div>
-                        <div class="">
-                            <span ng-repeat="racePos in ranking.RacePositions track by $index">
-                                {{racePos}}
-                            </span>
+                <div layout="row" style="padding-top: 0">
+                        <div layout="column">
+                            <div class="md-caption" translate>RACE_POSITIONS</div>
+                            <div class="">
+                                <span ng-repeat="racePos in ranking.RacePositions track by $index">
+                                    {{racePos}}
+                                </span>
+                            </div>
+                        </div>
+                        <div layout="column">
+                            <div class="md-caption" translate>WORLD_CUP_RANK</div>
+                            <div class="">{{ranking.WorldCupRank}}</div>
                         </div>
                     </div>
-                    <div layout="column">
-                        <div class="md-caption" translate>WORLD_CUP_RANK</div>
-                        <div class="">{{ranking.WorldCupRank}}</div>
-                    </div>
-                </div>
-        </md-card>
+            </md-card>
+        </md-virtual-repeat-container>
     </md-card-list>
     </md-content>
     `,
@@ -130,6 +132,8 @@ export class EventRankingResultsController extends TableBaseController<IEvent> {
         private $state: angular.ui.IStateService,
         private screenSize: any,
         private $scope: angular.IScope,
+        private $timeout: angular.ITimeoutService,
+        private $element: any,
         private Menus: Menus) {
         
         super(TableHelperService, 'rankings');
@@ -153,6 +157,7 @@ export class EventRankingResultsController extends TableBaseController<IEvent> {
             this.NavbarState.items = items;
         });
         
+        this.setVerticalContainerHeight(this.$timeout, this.$element, this.$scope);
         this.setSizeListeners();
     }
     
@@ -177,16 +182,21 @@ export class EventRankingResultsController extends TableBaseController<IEvent> {
     massStartFilter(item: any) {
         if (item.active) {
             var bestOfTheRest = [];
+            var quantityFromWorldCupRank = this.isWorldChampionship() ? 15 : 25;
             this.rankings = this._rankings.filter((ranking: IEventResult) => {
-                var wcRank = ranking.WorldCupRank <= 15;
-                var medalWinner = ranking.RacePositions.filter((pos: number) => {
-                    return pos <= 3;
-                }).length > 0;
+                var wcRank = ranking.WorldCupRank <= quantityFromWorldCupRank;
+                
+                if(this.isWorldChampionship){
+                    var medalWinner = ranking.RacePositions.filter((pos: number) => {
+                        return pos <= 3;
+                    }).length > 0; 
+                }
+                
                 if (!(wcRank || medalWinner)) {
                     bestOfTheRest.push(ranking);    
                 }
                 
-                return wcRank;
+                return this.isWorldChampionship() ? wcRank || medalWinner : wcRank;
             });
             
             var index = 30 - this.rankings.length;
@@ -197,5 +207,9 @@ export class EventRankingResultsController extends TableBaseController<IEvent> {
         else {
             this.rankings = this._rankings;
         }
+    }
+    
+    isWorldChampionship(){
+        return this.event.Description.indexOf('World Championships') > -1;
     }
 }

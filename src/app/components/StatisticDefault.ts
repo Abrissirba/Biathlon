@@ -158,7 +158,7 @@ export class StatisticDefaultController extends TableBaseController<IStat> {
         });
         
         this.setSizeListeners();
-        this.setVerticalContainerHeight();
+        this.setVerticalContainerHeight(this.$timeout, this.$element, this.$scope);
     }
     
     filter(text: string) {
@@ -175,20 +175,6 @@ export class StatisticDefaultController extends TableBaseController<IStat> {
         });
         this.desktop = this.screenSize.on('sm, md, lg', (match) => {
             this.desktop = match;
-        });
-    }
-    
-    setVerticalContainerHeight() {
-        this.$timeout(() => {
-            var elements = this.$element.find('md-virtual-repeat-container');
-            for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                var height = window.innerHeight - element.offsetTop;
-
-                element.style.height = height + 'px';
-                console.log(element);
-            }
-            this.$scope.$broadcast('$md-resize');
         });
     }
     

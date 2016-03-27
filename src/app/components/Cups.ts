@@ -27,7 +27,7 @@ export function abrisCups(): angular.IDirective {
                 </thead>
                 <tbody md-body>
                     <tr md-row ng-repeat='cup in cupsVm.cups track by cup.CupId' ui-sref="app.cupresults({seasonId: cupsVm.seasonId, cupId: cup.CupId})">
-                        <td md-cell>{{::cup.ShortDescription}}</td>
+                        <td md-cell>{{cup.ShortDescription | translate}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -37,7 +37,7 @@ export function abrisCups(): angular.IDirective {
     <md-card-list ng-if="cupsVm.mobile">
         <md-card class="list-item" ng-repeat="cup in cupsVm.cups track by cup.CupId"  ui-sref="app.cupresults({seasonId: cupsVm.seasonId, cupId: cup.CupId})">
             <div layout="row" layout-align="center center">
-                <div  flex>{{::cup.ShortDescription}}</div>
+                <div  flex>{{cup.ShortDescription | translate}}</div>
             </div>
         </md-card>
     </md-card-list>

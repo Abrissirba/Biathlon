@@ -32,4 +32,20 @@ export class TableBaseController <TEntity> {
     order (items: Array<any>) {
         this[this.entity] = this.TableHelperService.order(items, this.query);
     }
+    
+    setVerticalContainerHeight($timeout: angular.ITimeoutService, $element: any, $scope: angular.IScope) {
+        $timeout(() => {
+            var elements = $element.find('md-virtual-repeat-container');
+            for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                var viewportOffset = elements[i].getBoundingClientRect();
+                var height = window.innerHeight - viewportOffset.top;
+                var padding = 16;
+                
+                element.style.height = height - padding + 'px';
+                console.log(element);
+            }
+            $scope.$broadcast('$md-resize');
+        });
+    }
 }

@@ -37,6 +37,7 @@ export class LanguageSelectorController {
     }
     
     setLanguage(langKey) {
-        this.$translate.use(langKey);        
+        this.$translate.use(langKey);
+        localStorage.setItem('langKey', langKey);     
     }
 }

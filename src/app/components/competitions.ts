@@ -30,7 +30,7 @@ export function abrisCompetitions(): angular.IDirective {
                     <tr md-row ng-repeat='competition in competitionsVm.competitions track by competition.RaceId' ui-sref="app.results({seasonId: competitionsVm.seasonId, eventId: competitionsVm.eventId, raceId: competition.RaceId})">
                         <td md-cell>{{::competition.StartTime | date : 'dd MMM yyyy' : timezone}}</td>
                         <td md-cell>{{::competition.StartTime | date : 'HH:mm' : timezone}}</td>
-                        <td md-cell>{{::competition.Description}}</td>
+                        <td md-cell>{{competition.Description | translate}}</td>
                         <td md-cell>{{::competition.StatusText}}</td>
                     </tr>
                     </tbody>
@@ -41,7 +41,7 @@ export function abrisCompetitions(): angular.IDirective {
                 <table md-table md-row-select='false'>
                     <tbody md-body>
                     <tr md-row ng-repeat="eventRanking in competitionsVm.eventRankings track by $id(eventRanking)"  ui-sref="app.eventRankingResults({seasonId: competitionsVm.seasonId, eventId: competitionsVm.eventId, category: eventRanking.Category})">
-                        <td md-cell>{{::eventRanking.Title}}</td>
+                        <td md-cell>{{eventRanking.Title | translate}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -55,13 +55,13 @@ export function abrisCompetitions(): angular.IDirective {
                     <div class="md-caption" flex>{{::competition.StartTime | date : 'HH:mm' : timezone}}</div>
                 </div>
                 <div layout="row">
-                    <div class="md-subhead">{{::competition.ShortDescription}}</div>
+                    <div class="md-subhead">{{competition.ShortDescription | translate}}</div>
                 </div>
                 <div class="status" ng-class="{finished: competitionsVm.hasFinished(competition), 'not-finished': !competitionsVm.hasFinished(competition)}"></div>
             </md-card>
             <md-card class="list-item" ng-repeat="eventRanking in competitionsVm.eventRankings track by $id(eventRanking)"  ui-sref="app.eventRankingResults({seasonId: competitionsVm.seasonId, eventId: competitionsVm.eventId, category: eventRanking.Category})">
                 <div layout="row">
-                    <div class="md-subhead">{{::eventRanking.Title | translate}}</div>
+                    <div class="md-subhead">{{eventRanking.Title | translate}}</div>
                 </div>
             </md-card>
         </md-card-list>
@@ -85,7 +85,7 @@ export class CompetitionsController extends TableBaseController<ICompetition> {
     desktop: string;
     
     eventRankings = [{
-        Title: 'WOMENS_EVENT_RANKING',
+        Title: 'WOMEN_EVENT_RANKING',
         Category: 'women'
     },{
         Title: 'MEN_EVENT_RANKING',
