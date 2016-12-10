@@ -36,6 +36,7 @@
     "EDUCATION": "Utbildning",
     "YEARS": "År",
     "SEARCH": "Sök",
+<<<<<<< Updated upstream
     "VALUE": "Värde",
     "DETAILS": "Detaljer",
     "CURRENT_EVENT": "Pågende Tävling",
@@ -89,4 +90,7 @@
     "Relay Cup Women":"Stafett Kvinnor",
     "Relay Cup Men":"Stafett Män",
     "Mixed Relay Cup":"Mixed Stafett"
+=======
+    "ABOUT": "Om den här sidan"
+>>>>>>> Stashed changes
 }

@@ -11,6 +11,29 @@ export class Menus {
 
     }
     
+    Home(){
+        var defer = this.$q.defer();
+        var items = [{
+            title: "SCHEDULE_AND_RESULTS",
+            state: 'app.schedule({seasonId: ' + this.Seasons.currentSeason + '})'
+        }, {
+            title: "STANDINGS",
+            state: 'app.cups({seasonId: ' + this.Seasons.currentSeason + '})'
+        }, {
+            title: "ATHLETES",
+            state: 'app.athletes'
+        }, {
+            title: "STATISTICS",
+            state: 'app.stats({seasonId: ' + this.Seasons.currentSeason + '})'
+        }, {
+            title: "ABOUT",
+            state: 'app.about'
+        }];
+        
+        defer.resolve(items);
+        return defer.promise;
+    }
+    
     CupSeasons(activeSeasonId: any) : angular.IPromise<any> {
         var defer = this.$q.defer();
         this.Seasons.getList().then((seasons: Array<ISeason>) => {

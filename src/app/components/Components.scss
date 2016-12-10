@@ -144,3 +144,7 @@ abris-avatar {
     background-color: #c00;
     color: #fff;
 }
+
+div > p:first-child {
+    margin-top: 0;
+}

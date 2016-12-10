@@ -37,6 +37,7 @@
     "YEARS": "Jahre",
     "SEARCH": "Suche",
     "CURRENT_EVENT": "Aktuelle Veranstaltung",
+<<<<<<< Updated upstream
     "NEXT_RACE": "Nächstes Rennen",
     "WOMEN_EVENT_RANKING": "Frauen Wettkampfranking",
     "MEN_EVENT_RANKING": "Männer Wettkampfranking",
@@ -87,4 +88,7 @@
     "Relay Cup Women":"Staffelwertung Frauen",
     "Relay Cup Men":"Staffelwertung Männer",
     "Mixed Relay Cup":"Mixed Staffel Wertung"
+=======
+    "ABOUT": "About this page"
+>>>>>>> Stashed changes
 }

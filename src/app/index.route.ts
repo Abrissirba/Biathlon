@@ -44,6 +44,10 @@ export function routerConfig($stateProvider: angular.ui.IStateProvider, $urlRout
     .state('app.statisticDefault', {
         url: 'stat-default/:statisticId/:seasonId',
         template: temp('abrisStatisticDefault')
+    })
+    .state('app.about', {
+        url: 'about',
+        template: temp('abrisAbout')
     });
 
   $urlRouterProvider.otherwise('/');
