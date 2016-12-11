@@ -4,7 +4,7 @@ import { ISeason } from '../models/models'
 /** @ngInject */
 export class Seasons extends ApiBaseService<ISeason>{
     
-    currentSeason = '1516';
+    currentSeason = '1617';
     
     constructor(Restangular: restangular.IService, private $q: angular.IQService){
         super("seasons", Restangular);

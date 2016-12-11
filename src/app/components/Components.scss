@@ -71,6 +71,7 @@ md-card-list {
         padding: 8px 2px 8px 8px;
         
         &.home {
+            cursor: pointer;
             padding: 12px 16px;
             > div > div:first-child {
                 padding: 0;
@@ -120,16 +121,62 @@ abris-avatar {
     height: 40px;
     display: inline-block;
     overflow: hidden;
-    
+    position: relative;
+
     .md-avatar{
         border-radius: 50%;
         box-sizing: content-box;
-        width: 40px;
-        height: 40px;
+        width: 70px;
+        height: 50px;
+        position: absolute;
+        left: -15px;
         display: inline-block;
-        background-color: #eee;
+        background-color: #eee; 
         //transform: scale(1.8, 1.5) translateY(6px);
     }
+}
+
+abris-instagram-item {
+    padding: 8px;
+    iframe {
+        display: inline-block !important;
+        width: calc(25% - 40px);
+    }
+}
+
+tr:focus {outline:0;}
+abris-events {
+    .parent-row {
+        background-color: #fff;
+    }
+
+    table.md-table tbody.md-body>tr.md-row.child-row.expanded {
+        
+        height: 40px;
+        div, td {
+            max-height: 40px;
+            display: table-cell;
+        }
+    }
+    table.md-table tbody.md-body>tr.md-row.child-row {
+        max-height: 0px;
+        height: 0px;
+        background-color: #fafafa;
+        // transition:all 0.5s;
+        $childIndent: 16;
+        div, td {
+            // transition:all 0.5s;
+            max-height: 0px;
+            display: none;
+        }
+        td:first-child {
+            padding-left: #{24 + $childIndent}px !important;
+        }
+        td:nth-child(n+2) {
+            padding-left: #{$childIndent}px;
+        }
+    }
+
 }
 
 .layout-padding abris-avatar {

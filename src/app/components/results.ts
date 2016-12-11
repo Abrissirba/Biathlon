@@ -87,9 +87,6 @@ export class ResultsController extends TableBaseController<IResult> {
                     this._results = data;
                     this.results = data;
                 }
-                if (this.race.StatusId === 3) {
-                    
-                }
                 var defaultSortOrder = this.race.StatusId === 3 ? "StartOrder" : 'Rank';
                 this.onReorder(defaultSortOrder);
                 this.setVerticalContainerHeight(this.$timeout, this.$element, this.$scope);

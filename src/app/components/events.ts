@@ -1,4 +1,4 @@
-import { Events, TableHelperService, Seasons } from '../services/services';
+import { Events, TableHelperService, Seasons, Competitions } from '../services/services';
 import { IEvent, ISeason } from '../models/models';
 import { TableBaseController } from './TableBaseComponent';
 import { NavbarState } from './navbar/navbarState';
@@ -24,11 +24,17 @@ export function abrisEvents(): angular.IDirective {
                         <th md-column md-order-by='Description'><span translate>EVENT</span></th>
                     </tr>
                 </thead>
-                <tbody md-body>
-                    <tr md-row ng-repeat='event in eventsVm.events track by event.EventId' ui-sref="app.competitions({seasonId: eventsVm.seasonId, eventId: event.EventId})">
+                <tbody md-body >
+                <!--ui-sref="app.competitions({seasonId: eventsVm.seasonId, eventId: event.EventId})"-->
+                    <tr ng-repeat-start='event in eventsVm.events track by event.EventId' md-row class="parent-row" ng-click="eventsVm.toggleCompetitions(event, $event)">
                         <td md-cell>{{::event.StartDate | date : 'dd MMM yyyy' : timezone}}</td>
                         <td md-cell><abris-flag country-code="{{event.Nat}}" style="padding-right: 8px;"></abris-flag> {{::event.Organizer}}</td>
                         <td md-cell>{{::event.Description}}</td>
+                    </tr>
+                    <tr ng-class="{'expanded': event.expanded}" ng-repeat-end md-row class="child-row" ng-repeat='competition in event.competitions track by competition.RaceId' ui-sref="app.results({seasonId: eventsVm.seasonId, eventId: event.EventId, raceId: competition.RaceId})">
+                        <td md-cell><div>{{::competition.StartTime | date : 'dd MMM HH:mm' : timezone}}</div></td>
+                        <td md-cell><div>{{competition.Description | translate}}</div></td>
+                        <td md-cell><div>{{::competition.StatusText}}</div></td>
                     </tr>
                 </tbody>
             </table>
@@ -72,6 +78,7 @@ export class EventsController extends TableBaseController<IEvent> {
         TableHelperService: TableHelperService,
         Events: Events,
         private Seasons: Seasons,
+        private Competitions: Competitions,
         private NavbarState: NavbarState,
         private $state: angular.ui.IStateService,
         private screenSize: any) {
@@ -105,6 +112,21 @@ export class EventsController extends TableBaseController<IEvent> {
         });
         
         this.setSizeListeners();
+    }
+
+    toggleCompetitions(event: IEvent, mouseEvent: MouseEvent) {
+        
+        if(!event.competitions) {
+            this.promise = this.Competitions.getList(event.EventId).then((data) => {
+                event.competitions = data;
+                setTimeout(() => {
+                    event.expanded = !event.expanded;
+                },0)
+            });
+        }
+        else {
+            event.expanded = !event.expanded;
+        }
     }
     
     setSizeListeners() {

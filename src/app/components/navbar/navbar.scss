@@ -6,6 +6,8 @@ abris-navbar {
     position: static;
     display: block;
     box-shadow: rgba(51, 51, 51, 0.28) 4px 0px 5px -2px;
+    z-index: 10;
+    overflow: visible !important;
     
     $navbar-width: 200px;
 

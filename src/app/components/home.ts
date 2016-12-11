@@ -27,7 +27,8 @@ export function abrisHome(): angular.IDirective {
                 </md-card>
                 <md-card class="list-item home" ng-repeat="race in homeVm.nextRaces" ui-sref="{{ homeVm.getRaceLink(race)}}">
                     <div layout="row">
-                        <div class="md-caption" translate>NEXT_RACE</div>
+                        <div class="md-caption" translate ng-if="::race.StatusId !== 5">NEXT_RACE</div>
+                        <div class="md-caption" translate ng-if="::race.StatusId === 5">CURRENT_RACE</div>
                         <div class="md-caption date">{{::race.StartTime | date : 'dd MMM yyyy' : timezone}}</div>
                         <div class="md-caption date">{{::race.StartTime | date : 'HH:mm' : timezone}}</div>
                     </div>
@@ -38,6 +39,8 @@ export function abrisHome(): angular.IDirective {
                     <div>{{item.title | translate}}</div>
                 </md-card>
             </md-card-list>
+            <!-- <abris-instagram-item ng-repeat="item in homeVm.instagramItems" item-id="item"></abris-instagram-item> -->
+
         </md-content>
     `,
     controller: HomeController,
@@ -50,16 +53,22 @@ export function abrisHome(): angular.IDirective {
 /** @ngInject */
 export class HomeController {
     lastResults = {
-        seasonId: '1516',
+        seasonId: '1617',
         eventId: 'BT1516SWRLCP08',
         raceId: 'BT1516SWRLCP08SWRL'
     }
    prevEvent: IEvent;
    currentEvent: IEvent;
    nextEvent: IEvent;
-   nextRaces: Array<ICompetition>
+   nextRaces: Array<ICompetition>;
+   currentRace: ICompetition;
    smallDevice: boolean;
-    
+    instagramItems = [
+        "BNMpQ2WDv8B",
+        "BNPVkmigRz_",
+        "BNPw--sDzwd",
+        "BNPxpg_hTr2"
+    ]
     constructor(
         private NavbarState: NavbarState,
         private Seasons: Seasons,
@@ -90,7 +99,7 @@ export class HomeController {
        this.Events.getList(this.Seasons.currentSeason).then((events: Array<IEvent>) => {
            this.prevEvent = this.Events.getPreviousEvent(events);
            this.currentEvent = this.Events.getCurrentEvent(events);
-           this.nextEvent = this.Events.getPreviousEvent(events);
+           this.nextEvent = this.Events.getNextEvent(events);
            
            if (this.currentEvent) {
                this.getCompetitions(this.currentEvent);
@@ -99,6 +108,10 @@ export class HomeController {
     }
     
     getCompetitions(event: IEvent) {
+        this.Competitions.getCurrentCompetition(event.EventId).then((race: ICompetition) => {
+            this.currentRace = race;
+        });
+
         this.Competitions.getNextCompetitions(event.EventId).then((races: Array<ICompetition>) => {
             this.nextRaces = races;
         });
