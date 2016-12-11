@@ -45,6 +45,7 @@
     "SCORE": "Score",
     "RACE_POSITIONS": "Race Postitions",
     "WORLD_CUP_RANK": "World Cup Rank",
+<<<<<<< Updated upstream
     "2x6+2x7.5 Mixed Relay":"2x6+2x7.5 Mixed Relay",
     "Men 10 km Sprint Competition":"Men 10 km Sprint Competition",
     "Women 7.5 km Sprint Competition":"Women 7.5 km Sprint Competition",
@@ -89,4 +90,7 @@
     "Relay Cup Women":"Relay Cup Women",
     "Relay Cup Men":"Relay Cup Men",
     "Mixed Relay Cup":"Mixed Relay Cup"
+=======
+    "ABOUT": "About this page"
+>>>>>>> Stashed changes
 }

@@ -1,5 +1,5 @@
 import { NavbarState } from './navbar/navbarState';
-import { Seasons, Events, Competitions } from '../services/services';
+import { Seasons, Events, Competitions, Menus } from '../services/services';
 import { ISeason, IEvent, ICompetition } from '../models/models';
 
 /** @ngInject */
@@ -73,22 +73,13 @@ export class HomeController {
         private NavbarState: NavbarState,
         private Seasons: Seasons,
         private Events: Events,
+        private Menus: Menus,
         private Competitions: Competitions,
         private screenSize: any) {
-
-        this.NavbarState.items = [{
-            title: "SCHEDULE_AND_RESULTS",
-            state: 'app.schedule({seasonId: ' + this.Seasons.currentSeason + '})'
-        }, {
-            title: "STANDINGS",
-            state: 'app.cups({seasonId: ' + this.Seasons.currentSeason + '})'
-        }, {
-            title: "ATHLETES",
-            state: 'app.athletes'
-        }, {
-            title: "STATISTICS",
-            state: 'app.stats({seasonId: ' + this.Seasons.currentSeason + '})'
-        }];
+        
+        this.Menus.Home().then((items: any) => {
+            this.NavbarState.items = items;
+        });
         
         this.setSizeListeners();
         

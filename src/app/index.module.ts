@@ -28,6 +28,7 @@ import { abrisCupResults } from './components/cupresults';
 import { abrisFocus } from './components/inputs/focus';
 import { abrisEventRankingResults } from './components/EventRankingResults';
 import { abrisInstagramItem } from './components/instagramItem';
+import { abrisAbout } from './components/about';
 
 import { NavbarState } from './components/navbar/navbarState';
 
@@ -103,6 +104,7 @@ module biathlon {
     .directive('abrisAthlete', abrisAthlete)
     .directive('abrisEventRankingResults', abrisEventRankingResults)
     .directive('abrisInstagramItem', abrisInstagramItem)
+    .directive('abrisAbout', abrisAbout)
     
     .service('NavbarState', NavbarState)
     
